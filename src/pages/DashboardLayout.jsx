@@ -5,8 +5,10 @@ import Sidebar from '../components/Sidebar';
 import Inventory from './Inventory';
 
 const DashboardLayout = ({ role, userEmail, onLogout }) => {
- 
-  const [activeTab, setActiveTab] = useState('Dashboard'); 
+
+  const isCashier = role && (role.toLowerCase() === 'cashier staff' || role.toLowerCase() === 'cashier');
+  
+  const [activeTab, setActiveTab] = useState(isCashier ? 'Transactions' : 'Dashboard');
 
   return (
     <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">

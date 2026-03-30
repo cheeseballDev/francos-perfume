@@ -1,3 +1,4 @@
+import React from 'react';
 import logo from '../assets/FrancoPerfumeLogo.png';
 
 const Sidebar = ({ role, activeTab, setActiveTab }) => {
@@ -8,13 +9,15 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
   const isInventoryStaff = normalizedRole === 'inventory staff' || normalizedRole === 'inventory';
   const isCashierStaff = normalizedRole === 'cashier staff' || normalizedRole === 'cashier';
 
+  // NEW RULE: Cashiers cannot see the dashboard
+  const canSeeDashboard = !isCashierStaff; 
+  
   const canSeeInventory = isManager || isInventoryStaff;
   const canSeeRequests = isManager || isInventoryStaff;
   const canSeeTransactions = isManager || isCashierStaff;
   const canSeeForecast = isManager;
   const canSeeAdminTools = isAdmin;
 
-  // Helper function to keep button classes clean
   const getTabClass = (tabName) => {
     return `flex items-center gap-2 cursor-pointer p-3 rounded transition-colors ${
       activeTab === tabName ? 'bg-[#333] text-[#D4C4B0]' : 'hover:bg-[#333] text-gray-300'
@@ -30,10 +33,13 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
       
       <div className="p-6 flex flex-col gap-2 overflow-y-auto">
         
-        <div onClick={() => setActiveTab('Dashboard')} className={getTabClass('Dashboard')}>
-           <div className="w-4 h-4 bg-gray-400"></div>
-           <p className="font-medium text-sm">Dashboard</p>
-        </div>
+       
+        {canSeeDashboard && (
+          <div onClick={() => setActiveTab('Dashboard')} className={getTabClass('Dashboard')}>
+             <div className="w-4 h-4 bg-gray-400"></div>
+             <p className="font-medium text-sm">Dashboard</p>
+          </div>
+        )}
         
         {canSeeInventory && (
           <div onClick={() => setActiveTab('Inventory')} className={getTabClass('Inventory')}>
@@ -84,6 +90,5 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
     </div>
   );
 };
-
 
 export default Sidebar;
