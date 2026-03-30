@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import logo from '../assets/FrancoPerfumeLogo.png';
-import { ChevronLeft } from 'lucide-react'; // Bringing in the back arrow icon
+import { ChevronLeft } from 'lucide-react';
 
 const StaffLogin = ({ onLogin }) => {
   // --- STATE ---
-  // This boolean acts as our toggle switch between the two screens
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isManagerSelection, setIsManagerSelection] = useState(false); // NEW STATE
 
   // Form inputs
   const [email, setEmail] = useState('');
@@ -16,29 +16,51 @@ const StaffLogin = ({ onLogin }) => {
   // --- HANDLERS ---
   const handleLogin = (e) => {
     e.preventDefault();
+    
+    // Simulate backend role verification
     let simulatedRole = 'manager'; 
     if (email.toLowerCase().includes('cashier')) simulatedRole = 'cashier staff';
     if (email.toLowerCase().includes('inventory')) simulatedRole = 'inventory staff';
-    onLogin(simulatedRole, email);
+    
+    // INTERCEPT MANAGERS
+    if (simulatedRole === 'manager') {
+      setIsManagerSelection(true);
+    } else {
+      onLogin(simulatedRole, email);
+    }
+  };
+
+  const handleManagerModuleSelect = (moduleName) => {
+    if (moduleName === 'Cashier') {
+      // Temporarily downgrade their permissions strictly to Cashier
+      onLogin('cashier staff', email);
+    } else if (moduleName === 'Inventory') {
+      // Keep their full Manager permissions (Dashboard, Inventory, Forecast, etc.)
+      onLogin('manager', email);
+    }
   };
 
   const handleResetPassword = (e) => {
     e.preventDefault();
-    // Simulate what happens when they successfully submit the reset form
     alert("Password reset simulation! Sending you back to login...");
-    setIsForgotPassword(false); // Send them back to the normal login screen
+    setIsForgotPassword(false);
     setPassword('');
     setOtp('');
     setConfirmPassword('');
   };
 
+  const displayName = email ? email.split('@')[0] : 'User';
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F7F7F9] font-montserrat p-4 relative">
       
-      {/* GO BACK BUTTON (Only visible when isForgotPassword is true) */}
-      {isForgotPassword && (
+      {/* GO BACK BUTTON (Visible for Forgot Password OR Manager Selection) */}
+      {(isForgotPassword || isManagerSelection) && (
         <div 
-          onClick={() => setIsForgotPassword(false)}
+          onClick={() => {
+            setIsForgotPassword(false);
+            setIsManagerSelection(false);
+          }}
           className="absolute top-8 left-8 flex items-center gap-1 cursor-pointer text-gray-500 hover:text-gray-800 transition-colors"
         >
           <ChevronLeft size={20} />
@@ -48,83 +70,99 @@ const StaffLogin = ({ onLogin }) => {
 
       <div className="w-full max-w-sm flex flex-col items-center">
         
-        {/* LOGO & HEADERS (Shared between both screens) */}
-        <img src={logo} alt="Franco's Logo" className="h-24 w-auto object-contain mb-4" />
-        <h1 className="text-[28px] font-bold text-[#333] mb-1 tracking-tight">OneFrancoScentHub</h1>
-        
-        {/* Only show "Welcome back!" on the main login screen */}
-        {!isForgotPassword ? (
-          <p className="text-gray-500 mb-8 text-sm">Welcome back!</p>
-        ) : (
-          <div className="mb-8"></div> // Empty spacer so the forms don't jump up
-        )}
-
-        {/* --- DYNAMIC FORM RENDERING --- */}
-        {!isForgotPassword ? (
-          
-          /* === SCREEN 1: NORMAL LOGIN FORM === */
-          <form onSubmit={handleLogin} className="w-full flex flex-col gap-3">
-            <input 
-              type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
-            <input 
-              type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
-
-            <button 
-              type="button" 
-              onClick={() => setIsForgotPassword(true)} // This triggers the toggle!
-              className="w-full bg-[#7D162E] text-white rounded py-2.5 font-medium hover:bg-[#631124] transition-colors text-sm mt-2 shadow-sm"
-            >
-              Forgot Password
-            </button>
-            <button 
-              type="submit" 
-              className="w-full bg-[#D4C4B0] text-[#333] rounded py-2.5 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm"
-            >
-              Login
-            </button>
-          </form>
-
-        ) : (
-          
-          /* === SCREEN 2: FORGOT PASSWORD FORM === */
-          <form onSubmit={handleResetPassword} className="w-full flex flex-col gap-3">
-            <input 
-              type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
-            <input 
-              type="text" placeholder="Enter generated password" value={otp} onChange={(e) => setOtp(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
-            <input 
-              type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
-            <input 
-              type="password" placeholder="Enter confirmation password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required
-              className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
-            />
+        {/* --- SCREEN 3: MANAGER MODULE SELECTION --- */}
+        {isManagerSelection ? (
+          <div className="w-full flex flex-col items-center mt-8">
+            <h2 className="text-[24px] font-bold text-[#333] mb-1 tracking-tight">Select A Module</h2>
+            <p className="text-gray-500 mb-10 text-sm">Welcome back {displayName}.</p>
             
-            {/* The Maroon Instruction Box */}
-            <div className="w-full bg-[#7D162E] text-white text-center rounded p-4 mt-2 shadow-sm text-xs leading-relaxed">
-              <p className="font-semibold mb-2">Please check your email for the<br/>one-time generated password</p>
-              <p className="text-[10px]">If you have not received an email,<br/>notify your manager to reset your<br/>password.</p>
-            </div>
-
             <button 
-              type="submit" 
-              className="w-full bg-[#D4C4B0] text-[#333] rounded py-2.5 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm mt-1"
+              onClick={() => handleManagerModuleSelect('Cashier')}
+              className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm mb-4"
             >
-              Login
+              Access POS
             </button>
-          </form>
+            
+            <button 
+              onClick={() => handleManagerModuleSelect('Inventory')}
+              className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm"
+            >
+              Access Dashboard
+            </button>
+          </div>
+        ) : (
+          
+          /* --- SCREENS 1 & 2: LOGIN & FORGOT PASSWORD --- */
+          <>
+            <img src={logo} alt="Franco's Logo" className="h-24 w-auto object-contain mb-4" />
+            <h1 className="text-[28px] font-bold text-[#333] mb-1 tracking-tight">OneFrancoScentHub</h1>
+            
+            {!isForgotPassword ? (
+              <p className="text-gray-500 mb-8 text-sm">Welcome back!</p>
+            ) : (
+              <div className="mb-8"></div> 
+            )}
 
+            {!isForgotPassword ? (
+              /* SCREEN 1: NORMAL LOGIN */
+              <form onSubmit={handleLogin} className="w-full flex flex-col gap-3">
+                <input 
+                  type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+                <input 
+                  type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+
+                <button 
+                  type="button" onClick={() => setIsForgotPassword(true)}
+                  className="w-full bg-[#7D162E] text-white rounded py-2.5 font-medium hover:bg-[#631124] transition-colors text-sm mt-2 shadow-sm"
+                >
+                  Forgot Password
+                </button>
+                <button 
+                  type="submit" 
+                  className="w-full bg-[#D4C4B0] text-[#333] rounded py-2.5 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm"
+                >
+                  Login
+                </button>
+              </form>
+            ) : (
+              /* SCREEN 2: FORGOT PASSWORD */
+              <form onSubmit={handleResetPassword} className="w-full flex flex-col gap-3">
+                <input 
+                  type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+                <input 
+                  type="text" placeholder="Enter generated password" value={otp} onChange={(e) => setOtp(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+                <input 
+                  type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+                <input 
+                  type="password" placeholder="Enter confirmation password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required
+                  className="w-full border border-gray-300 rounded px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#7D162E] transition-colors bg-white"
+                />
+                
+                <div className="w-full bg-[#7D162E] text-white text-center rounded p-4 mt-2 shadow-sm text-xs leading-relaxed">
+                  <p className="font-semibold mb-2">Please check your email for the<br/>one-time generated password</p>
+                  <p className="text-[10px]">If you have not received an email,<br/>notify your manager to reset your<br/>password.</p>
+                </div>
+
+                <button 
+                  type="submit" 
+                  className="w-full bg-[#D4C4B0] text-[#333] rounded py-2.5 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm mt-1"
+                >
+                  Login
+                </button>
+              </form>
+            )}
+          </>
         )}
-
       </div>
     </div>
   );
