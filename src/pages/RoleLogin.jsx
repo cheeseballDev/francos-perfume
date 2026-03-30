@@ -1,11 +1,21 @@
-import React from 'react';
+const RoleButton = ({label, onClick}) => {
+  return (
+  <button 
+      onClick={onClick}
+      className="w-full py-4 bg-[#E2D6C5] hover:bg-[#D4C4B0] text-[#4A4A4A] font-medium
+                rounded-sm shadow-sm transition-all duration-300 tracking-wide uppercase text-sm">
+      {label}
+    </button>
+  );
+};
+
 
 const RoleLogin = ({ onSelect }) => {
   const roles = [
     { id: 'Cashier', label: 'Login as Cashier' },
     { id: 'Inventory', label: 'Login as Inventory' },
     { id: 'Manager', label: 'Login as Manager' },
-    ({ id: 'Admin', label: 'Login as Admin' }),
+    { id: 'Admin', label: 'Login as Admin' },
   ];
 
   return (
@@ -15,18 +25,17 @@ const RoleLogin = ({ onSelect }) => {
 
       <div className="flex flex-col gap-4 w-full max-w-sm px-6">
         {roles.map((role) => (
-          <button
+          <RoleButton
             key={role.id}
-            onClick={() => onSelect(role.id)} // This triggers the switch in App.jsx
-            className="w-full py-4 bg-[#E2D6C5] hover:bg-[#D4C4B0] text-[#4A4A4A] font-medium 
-                       rounded-sm shadow-sm transition-all duration-300 tracking-wide uppercase text-sm"
-          >
-            {role.label}
-          </button>
+            label={role.label}
+            onClick={() => onSelect(role.id)}
+          />
         ))}
       </div>
     </div>
   );
 };
+
+
 
 export default RoleLogin;

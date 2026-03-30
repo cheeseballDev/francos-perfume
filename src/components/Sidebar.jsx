@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../assets/FrancoPerfumeLogo.png';
 
 const Sidebar = ({ role, activeTab, setActiveTab }) => {
@@ -85,5 +84,6 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
     </div>
   );
 };
+
 
 export default Sidebar;

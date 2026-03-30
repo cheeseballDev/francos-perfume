@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('assets/fonts/Montserrat_Font.ttf') format('truetype');
+
+}
+
+@theme {
+    --font-montserrat: "Montserrat", sans-serif;
+    --font-sans: var(--font-montserrat);
+}
+
+@layer base {
+    html, body {
+        font-family: var(--font-montserrat) !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}

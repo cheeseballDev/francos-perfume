@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import RoleLogin from "./components/RoleLogin"; 
-import StaffLogin from "./components/StaffLogin";
-import DashboardLayout from "./components/DashboardLayout";
+import { useState } from "react";
+import DashboardLayout from "./pages/DashboardLayout";
+import RoleLogin from "./pages/RoleLogin";
+import StaffLogin from "./pages/StaffLogin";
 
 function App() {
   const [view, setView] = useState("gateway");

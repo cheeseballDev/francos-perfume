@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
-import Header from './Header';
+
+import { useState } from 'react';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 import Inventory from './Inventory';
 
 const DashboardLayout = ({ role, userEmail, onLogout }) => {
