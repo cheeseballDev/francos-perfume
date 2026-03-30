@@ -1,12 +1,8 @@
-<<<<<<< HEAD:src/components/DashboardLayout.jsx
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+
+import { useState } from 'react';
 import Header from './Header';
-=======
-import { useEffect, useState } from 'react';
-import logo from '../assets/FrancoPerfumeLogo.png';
->>>>>>> 0f93a284b441b77e4737bd7322fddd38d76e9480:src/pages/DashboardLayout.jsx
 import Inventory from './Inventory';
+import Sidebar from './Sidebar';
 
 const DashboardLayout = ({ role, userEmail, onLogout }) => {
  
