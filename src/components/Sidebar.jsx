@@ -11,7 +11,11 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
   const canSeeDashboard = !isCashierStaff; 
   const canSeeInventory = isManager || isInventoryStaff;
   const canSeeRequests = isManager || isInventoryStaff;
-  const canSeeTransactions = isManager || isCashierStaff;
+  
+  // NEW SEPARATED RULES
+  const canSeePOS = isCashierStaff; 
+  const canSeeTransactionHistory = isManager;
+  
   const canSeeForecast = isManager;
 
   const getTabClass = (tabName) => {
@@ -50,10 +54,19 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           </div>
         )}
 
-        {canSeeTransactions && (
-          <div onClick={() => setActiveTab('Transactions')} className={getTabClass('Transactions')}>
+        {/* NEW POS TAB */}
+        {canSeePOS && (
+          <div onClick={() => setActiveTab('POS')} className={getTabClass('POS')}>
              <div className="w-4 h-4 bg-gray-500"></div>
-             <p className="font-medium text-sm">Transactions (POS)</p>
+             <p className="font-medium text-sm">Point of Sale (POS)</p>
+          </div>
+        )}
+
+        {/* NEW TRANSACTION HISTORY TAB */}
+        {canSeeTransactionHistory && (
+          <div onClick={() => setActiveTab('Transaction History')} className={getTabClass('Transaction History')}>
+             <div className="w-4 h-4 bg-gray-500"></div>
+             <p className="font-medium text-sm">Transaction History</p>
           </div>
         )}
             

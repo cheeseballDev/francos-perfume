@@ -5,7 +5,9 @@ import Inventory from './Inventory';
 
 const DashboardLayout = ({ role, userEmail, onLogout }) => {
   const isCashier = role && (role.toLowerCase() === 'cashier staff' || role.toLowerCase() === 'cashier');
-  const [activeTab, setActiveTab] = useState(isCashier ? 'Transactions' : 'Dashboard'); 
+  
+  // Updated Cashier default to 'POS'
+  const [activeTab, setActiveTab] = useState(isCashier ? 'POS' : 'Dashboard'); 
 
   return (
     <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">
@@ -44,9 +46,17 @@ const DashboardLayout = ({ role, userEmail, onLogout }) => {
             </div>
           )}
 
-          {activeTab === 'Transactions' && (
+          {/* NEW POS SCREEN */}
+          {activeTab === 'POS' && (
             <div className="animate-fade-in">
               <h1 className="text-[32px] font-bold text-gray-900 mb-8 leading-none tracking-tight">Point of Sale (POS)</h1>
+            </div>
+          )}
+
+          {/* NEW TRANSACTION HISTORY SCREEN */}
+          {activeTab === 'Transaction History' && (
+            <div className="animate-fade-in">
+              <h1 className="text-[32px] font-bold text-gray-900 mb-8 leading-none tracking-tight">Transaction History</h1>
             </div>
           )}
 
