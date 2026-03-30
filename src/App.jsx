@@ -1,54 +1,35 @@
-import { useState } from "react";
-import DashboardLayout from "./pages/DashboardLayout";
-import RoleLogin from "./pages/RoleLogin";
-import StaffLogin from "./pages/StaffLogin";
+import React, { useState } from 'react';
+import StaffLogin from './pages/StaffLogin';
+import DashboardLayout from './pages/DashboardLayout';
 
-function App() {
-  const [view, setView] = useState("gateway");
-  const [selectedRole, setSelectedRole] = useState("");
-  const [userEmail, setUserEmail] = useState(""); 
+const App = () => {
+  // This state tracks if someone is logged in, and what their role/email is.
+  // When it is 'null', they are forced to the login screen.
+  const [user, setUser] = useState(null);
 
-  const handleRoleSelect = (roleName) => {
-    setSelectedRole(roleName);
-    setView("login");
+  // This gets passed to the StaffLogin component
+  const handleLogin = (role, email) => {
+    setUser({ role, email });
   };
 
-  const handleGoBack = () => {
-    setView("gateway");
-  };
-
-  const handleLoginSuccess = (email) => {
-    setUserEmail(email);
-    setView("dashboard");
-  };
-
+  // This gets passed to the DashboardLayout Header component
   const handleLogout = () => {
-    setUserEmail(""); 
-    setSelectedRole(""); 
-    setView("gateway"); 
+    setUser(null);
   };
 
   return (
-    <div className="font-sans min-h-screen">
-      {view === "gateway" && <RoleLogin onSelect={handleRoleSelect} />}
-      
-      {view === "login" && (
-        <StaffLogin 
-          role={selectedRole} 
-          onBack={handleGoBack} 
-          onLoginSuccess={handleLoginSuccess} 
-        />
-      )}
-      
-      {view === "dashboard" && (
+    <>
+      {!user ? (
+        <StaffLogin onLogin={handleLogin} />
+      ) : (
         <DashboardLayout 
-          role={selectedRole} 
-          userEmail={userEmail} 
+          role={user.role} 
+          userEmail={user.email} 
           onLogout={handleLogout} 
         />
       )}
-    </div>
+    </>
   );
-}
+};
 
 export default App;
