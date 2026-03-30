@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // WE ADD 'onLoginSuccess' TO THE PROPS HERE
 const StaffLogin = ({ role, onBack, onLoginSuccess }) => {
