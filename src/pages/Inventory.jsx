@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EditProductModal from '../components/EditProductModal';
-
+import AddProductModal from '../components/AddProductModal';
 // ============================================================================
 // 🚨 DELETE THIS CODE IF CONNECTED TO THE API
 // ============================================================================
@@ -13,7 +13,8 @@ const initialData = [
 ];
 // ============================================================================
 
-const Inventory = () => {
+const Inventory = ({ role }) => {
+  const isManager = role === 'manager';
   // --- STATE ---
   // MOVED THIS INSIDE THE COMPONENT!
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,6 +24,8 @@ const Inventory = () => {
   // States for the Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+//States for the add Product Modal
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   /* // 🔌 UNCOMMENT WHEN .NET IS READY
   const [inventory, setInventory] = useState([]);
@@ -92,9 +95,20 @@ const Inventory = () => {
           <h1 className="text-[32px] font-bold text-gray-800 tracking-tight leading-none mb-2">Inventory</h1>
           <p className="text-gray-400 text-sm">Overview of all available parfum products</p>
         </div>
-        <button className="flex items-center gap-2 bg-[#E3D7C6] hover:bg-[#D6C9B8] text-gray-800 px-4 py-2 rounded font-medium transition-colors text-sm shadow-sm">
-          <span className="text-lg">▤</span> Scan barcode
-        </button>
+        
+        {/* We put the buttons in a flex container so they sit next to each other */}
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 bg-[#E3D7C6] hover:bg-[#D6C9B8] text-gray-800 px-4 py-2 rounded font-medium transition-colors text-sm shadow-sm">
+            <span className="text-lg">▤</span> Scan barcode
+          </button>
+
+          {/* SECURITY CHECK: Only show this if the user is a manager */}
+          {isManager && (
+            <button onClick={() => setIsAddModalOpen(true)} className="flex items-center gap-2 bg-[#94BE9F] text-white px-5 py-2.5 rounded font-bold text-sm hover:bg-[#7fa78a] transition-colors shadow-sm">
+              + ADD PRODUCT
+            </button>
+          )}
+        </div>
       </div>
 
       {/* FILTERS SECTION */}
@@ -182,7 +196,10 @@ const Inventory = () => {
         product={editingProduct}
         onSave={handleSaveEdit}
       />
-
+    <AddProductModal 
+    isOpen={isAddModalOpen} 
+    onClose={() => setIsAddModalOpen(false)} 
+  />
     </div>
   );
 };

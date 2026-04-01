@@ -60,7 +60,7 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
           
           {/* LOOK HOW CLEAN THIS IS NOW */}
           {activeTab === 'Dashboard' && <DashboardHome />}
-          {activeTab === 'Inventory' && <Inventory />}
+          {activeTab === 'Inventory' && <Inventory role ={currentActiveRole}/>}
           
           {/* You can do the exact same thing for these three pages next! */}
           {activeTab === 'Requests' && <h1 className="text-[32px] font-bold">Delivery Requests</h1>}
