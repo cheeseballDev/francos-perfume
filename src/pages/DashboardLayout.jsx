@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Inventory from './Inventory';
 import POS from './POS';
+import DashboardHome from './DashboardHome'; // NEW IMPORT
 
 const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, onLogout }) => {
   const baseRole = trueRole ? trueRole.toLowerCase() : '';
@@ -29,9 +30,7 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
 
   const canSwitchAccess = baseRole === 'manager';
 
-  // ==========================================
-  // NEW: FULL SCREEN TAKEOVER FOR POS
-  // ==========================================
+  // FULL SCREEN TAKEOVER FOR POS
   if (activeTab === 'POS') {
     return (
       <POS 
@@ -43,23 +42,27 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
     );
   }
 
-  // STANDARD DASHBOARD LAYOUT (For all other tabs)
+  // STANDARD DASHBOARD LAYOUT
   return (
     <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">
       <Sidebar role={currentActiveRole} activeTab={activeTab} setActiveTab={setActiveTab} />
+      
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <Header role={currentActiveRole} userEmail={userEmail} onLogout={onLogout} canSwitchAccess={canSwitchAccess} onSwitchAccess={handleSwitchAccess} />
+        <Header 
+          role={currentActiveRole} 
+          userEmail={userEmail} 
+          onLogout={onLogout} 
+          canSwitchAccess={canSwitchAccess} 
+          onSwitchAccess={handleSwitchAccess} 
+        />
+        
         <main className="flex-1 p-8 overflow-auto bg-[#F7F7F9]">
           
-          {activeTab === 'Dashboard' && (
-            <div className="animate-fade-in">
-              <h1 className="text-[32px] font-bold text-gray-900 mb-2 leading-none tracking-tight">Dashboard</h1>
-              <div className="h-64 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400">Placeholder</div>
-            </div>
-          )}
-
+          {/* LOOK HOW CLEAN THIS IS NOW */}
+          {activeTab === 'Dashboard' && <DashboardHome />}
           {activeTab === 'Inventory' && <Inventory />}
           
+          {/* You can do the exact same thing for these three pages next! */}
           {activeTab === 'Requests' && <h1 className="text-[32px] font-bold">Delivery Requests</h1>}
           {activeTab === 'Transaction History' && <h1 className="text-[32px] font-bold">Transaction History</h1>}
           {activeTab === 'Forecast' && <h1 className="text-[32px] font-bold">Sales Forecasting</h1>}
