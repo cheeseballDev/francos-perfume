@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import AddProductModal from '../components/AddProductModal';
+import AddProductModal from '../components/inventory_components/AddProductModal';
 import EditProductModal from '../components/inventory_components/EditProductModal';
 // ============================================================================
 // 🚨 DELETE THIS CODE IF CONNECTED TO THE API

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/general_components/Header';
 import Sidebar from '../components/general_components/Sidebar';
-import Inventory from './Inventory';
-import POS from './POS';
-import DashboardHome from './DashboardHome'; // NEW IMPORT
+import DashboardHome from './DashboardHomePage'; // NEW IMPORT
+import Inventory from './InventoryPage';
+import POS from './PointOfSalePage';
 
 const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, onLogout }) => {
   const baseRole = trueRole ? trueRole.toLowerCase() : '';

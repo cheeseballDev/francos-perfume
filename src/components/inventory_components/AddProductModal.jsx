@@ -14,3 +14,5 @@ return(
   </div> 
 );
 }
+
+export default AddProductModal;
