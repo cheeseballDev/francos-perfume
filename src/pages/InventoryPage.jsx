@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import EditProductModal from '../components/EditProductModal';
+import { useState } from 'react';
+import EditProductModal from '../components/inventory_components/EditProductModal';
 
 // ============================================================================
 // 🚨 DELETE THIS CODE IF CONNECTED TO THE API
