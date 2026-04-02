@@ -93,8 +93,8 @@ const Inventory = ({ role }) => {
       {/* HEADER SECTION */}
       <div className="flex justify-between items-end mb-6">
         <div>
-          <h1 className="text-[32px] font-bold text-gray-800 tracking-tight leading-none mb-2">Inventory</h1>
-          <p className="text-gray-400 text-sm">Overview of all available parfum products</p>
+          <h1 className="text-[32px] font-bold text-custom-black tracking-tight leading-none mb-2">Inventory</h1>
+          <p className="text-custom-gray text-sm">Overview of all available parfum products</p>
         </div>
         
         {/* We put the buttons in a flex container so they sit next to each other */}
