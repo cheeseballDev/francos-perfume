@@ -18,6 +18,7 @@
     --color-custom-green: #509C54;
     --color-custom-purple: #AA59BE;
     --color-custom-blue: #424E9E;
+    --color-custom-80-black: #501c1c1c;
 }
 
 @layer base {

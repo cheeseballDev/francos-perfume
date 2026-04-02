@@ -10,18 +10,39 @@ const DashboardHome = () => {
       <p className="text-gray-500 text-sm mb-8">System overview and quick metrics.</p>
       
       {/* This is where future charts and graphs will go */}
-      <StatusCard
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+        <StatusCard
         title={"Total Inventory"}
         mainValue={"1,450"}
+        subText="from last month"
         Icon={Boxes}
-        iconColor={"text-custom-green"}
-      />
-      <StatusCard 
-        title={"Pending Requests"}
-        mainValue={"5"}
-        Icon={Clock}
-        iconColor={"text-custom-blue"}
-      />
+        color={"text-custom-green"}
+        secondValue={"12% "}
+
+        />
+        <StatusCard 
+          title={"Pending Requests"}
+          mainValue={"5"}
+          Icon={Clock}
+          color={"text-custom-blue"}
+        />
+
+        <StatusCard 
+          title={"Pending Requests"}
+          mainValue={"5"}
+          Icon={Clock}
+          color={"text-custom-blue"}
+        />
+
+        <StatusCard 
+          title={"Pending Requests"}
+          mainValue={"5"}
+          Icon={Clock}
+          color={"text-custom-blue"}
+        />
+
+      </div>
+  
       <div className="h-64 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 bg-white">
         Metrics Dashboard Placeholder
         
