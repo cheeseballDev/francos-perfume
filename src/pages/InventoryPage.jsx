@@ -153,14 +153,15 @@ const Inventory = ({ role }) => {
 
       <DataTable 
         headers={productTableHeaders}
-        data={productTableData}
+        data={filteredInventory}
         renderActions={(item) => {
+          return(
           <>
             <button onClick={() => handleIncreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">+</button>
             <button onClick={() => handleDecreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">-</button>
             <button onClick={() => handleOpenEditModal(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded flex items-center justify-center transition-colors text-xs">📝</button>
           </>
-        }}
+        )}}
       />
       
 

@@ -14,9 +14,9 @@ const DataTable = ({headers, data, renderActions}) => {
           </thead>
 
             {
-                /*
-                    THE FUCKING ITEMS
-                */
+              /*
+                THE FUCKING ITEMS
+              */
             }
           <tbody>
           {data.map((item, index) => (
@@ -25,7 +25,7 @@ const DataTable = ({headers, data, renderActions}) => {
               {/* DYNAMIC DATA CELLS */}
               {headers.map((header) => (
                 <td key={header.key} className="py-3 px-4 text-sm text-gray-600">
-                    item[header.key] 
+                    {item[header.key]} 
                 </td>
               ))}
 
@@ -38,7 +38,6 @@ const DataTable = ({headers, data, renderActions}) => {
             </tr>
           ))}
         </tbody>
-
         </table>
       </div>
     )
