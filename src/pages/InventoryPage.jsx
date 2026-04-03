@@ -1,11 +1,24 @@
 
 import { useState } from 'react';
+import DataTable from '../components/dashboard_components/DataTable';
 import AddProductModal from '../components/inventory_components/AddProductModal';
 import EditProductModal from '../components/inventory_components/EditProductModal';
 // ============================================================================
 // 🚨 DELETE THIS CODE IF CONNECTED TO THE API
 // ============================================================================
-const initialData = [
+
+const productTableHeaders = [
+  { label: 'ID', key: 'id'},
+  { label: 'Perfume', key:'name'},
+  { label: 'Type', key: 'type'},
+  { label: 'Branch', key: 'branch'},
+  { label: 'Note', key: 'note'},
+  { label: 'Gender', key: 'gender'},
+  { label: 'Date Created', key: 'date'},
+  { label: 'Quantity', key: 'qty'}
+];
+
+const productTableData = [
   { id: '01', name: 'Apricot', type: 'Premium', branch: 'Sta. Lucia', note: 'Karat', gender: 'Male', date: '09-09-2025', qty: 100 },
   { id: '02', name: 'Ocean Breeze', type: 'Premium', branch: 'Sta. Lucia', note: 'Karat', gender: 'Female', date: '09-09-2025', qty: 100 },
   { id: '03', name: 'Midnight Wood', type: 'Premium', branch: 'Sta. Lucia', note: 'Karat', gender: 'Male', date: '09-09-2025', qty: 100 },
@@ -20,7 +33,7 @@ const Inventory = ({ role }) => {
   // MOVED THIS INSIDE THE COMPONENT!
   const [searchQuery, setSearchQuery] = useState('');
   
-  const [inventory, setInventory] = useState(initialData);
+  const [inventory, setInventory] = useState(productTableData);
   
   // States for the Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -114,8 +127,6 @@ const Inventory = ({ role }) => {
 
       {/* FILTERS SECTION */}
       <div className="flex gap-4 mb-6">
-        
-        {/* RESTORED: Inline Search Bar connected to state */}
         <div className="relative flex-1 max-w-xs">
           <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
           <input 
@@ -139,48 +150,20 @@ const Inventory = ({ role }) => {
       </div>
 
       {/* TABLE SECTION */}
-      <div className="flex-1 bg-white overflow-auto border border-gray-100 rounded-t-md shadow-sm custom-scrollbar">
-        <table className="w-full text-left border-collapse whitespace-nowrap">
-          <thead className="sticky top-0 bg-white z-10 border-b border-gray-200">
-            <tr>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Perfume</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Type ▾</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Branch ▾</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Note ▾</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Gender ▾</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Qty ▾</th>
-              <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* CHANGED: We now map over filteredInventory instead of inventory! */}
-            {filteredInventory.map((item, index) => (
-      <tr key={item.id} className={index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white hover:bg-gray-50 transition-colors'}>
-        <td className="py-3 px-4 text-sm text-gray-600 font-medium">{item.id}</td>
-                <td className="py-3 px-4 text-sm text-gray-800 flex items-center gap-2 font-bold"><span className="text-xs">🧴</span> {item.name}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{item.type}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{item.branch}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{item.note}</td>
-                <td className="py-3 px-4 text-sm text-gray-600">{item.gender}</td>
-                <td className={`py-3 px-4 text-sm text-center font-bold ${item.qty === 0 ? 'text-red-500' : 'text-gray-800'}`}>{item.qty}</td>
-                
-                <td className="py-3 px-4 flex justify-center gap-1.5">
-                  <button onClick={() => handleIncreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">+</button>
-                  <button onClick={() => handleDecreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">-</button>
-                  
-                  <button 
-                    onClick={() => handleOpenEditModal(item.id)} 
-                    className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded flex items-center justify-center transition-colors text-xs"
-                  >
-                    📝
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      <DataTable 
+        headers={productTableHeaders}
+        data={filteredInventory}
+        renderActions={(item) => {
+          return(
+          <>
+            <button onClick={() => handleIncreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">+</button>
+            <button onClick={() => handleDecreaseQty(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors">-</button>
+            <button onClick={() => handleOpenEditModal(item.id)} className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded flex items-center justify-center transition-colors text-xs">📝</button>
+          </>
+        )}}
+      />
+      
 
       <div className="py-4 flex justify-between items-center text-sm text-gray-500 border-t border-gray-100">
         <p>Showing {filteredInventory.length} entries</p>
