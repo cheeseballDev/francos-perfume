@@ -116,7 +116,10 @@ const Inventory = ({ role }) => {
             <span className="text-lg">▤</span> Scan barcode
           </button>
 
-          {/* SECURITY CHECK: Only show this if the user is a manager */}
+          {/* 
+            CHECK IF USER IS MANAGER
+          */}
+
           {isManager && (
             <button onClick={() => setIsAddModalOpen(true)} className="flex items-center gap-2 bg-[#94BE9F] text-white px-5 py-2.5 rounded font-bold text-sm hover:bg-[#7fa78a] transition-colors shadow-sm">
               + ADD PRODUCT
@@ -180,10 +183,11 @@ const Inventory = ({ role }) => {
         product={editingProduct}
         onSave={handleSaveEdit}
       />
-    <AddProductModal 
-    isOpen={isAddModalOpen} 
-    onClose={() => setIsAddModalOpen(false)} 
-  />
+
+      <AddProductModal 
+      isOpen={isAddModalOpen} 
+      onClose={() => setIsAddModalOpen(false)} 
+      />
     </div>
   );
 };
