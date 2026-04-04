@@ -1,21 +1,21 @@
 
 import { useState } from 'react';
-import DataTable from '../components/dashboard_components/DataTable';
+import DataTable from '../components/data_components/DataTable';
 import AddProductModal from '../components/inventory_components/AddProductModal';
 import EditProductModal from '../components/inventory_components/EditProductModal';
-// ============================================================================
-// 🚨 DELETE THIS CODE IF CONNECTED TO THE API
-// ============================================================================
-
+{/*
+    TEMP DATA 
+  */
+ }
 const productTableHeaders = [
-  { label: 'ID', key: 'id'},
-  { label: 'Perfume', key:'name'},
-  { label: 'Type', key: 'type'},
-  { label: 'Branch', key: 'branch'},
-  { label: 'Note', key: 'note'},
-  { label: 'Gender', key: 'gender'},
-  { label: 'Date Created', key: 'date'},
-  { label: 'Quantity', key: 'qty'}
+  { label: 'ID', key: 'id', sortable: false},
+  { label: 'Perfume', key:'name', sortable: true},
+  { label: 'Type', key: 'type', sortable: false},
+  { label: 'Branch', key: 'branch', sortable: false},
+  { label: 'Note', key: 'note', sortable: false},
+  { label: 'Gender', key: 'gender', sortable: false},
+  { label: 'Date Created', key: 'date', sortable: true},
+  { label: 'Quantity', key: 'qty', sortable: true}
 ];
 
 const productTableData = [
@@ -25,20 +25,18 @@ const productTableData = [
   { id: '04', name: 'Citrus Bloom', type: 'Premium', branch: 'Sta. Lucia', note: 'Apricot', gender: 'Male', date: '09-09-2025', qty: 100 },
   { id: '05', name: 'Velvet Rose', type: 'Premium', branch: 'Sta. Lucia', note: 'Apricot', gender: 'Female', date: '09-09-2025', qty: 100 },
 ];
-// ============================================================================
-
 const Inventory = ({ role }) => {
   const isManager = role === 'manager';
-  // --- STATE ---
-  // MOVED THIS INSIDE THE COMPONENT!
+
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortConfig, setSortConfig] = useState({key: 'id', direction: 'ascending'});
+
   
   const [inventory, setInventory] = useState(productTableData);
   
-  // States for the Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-//States for the add Product Modal
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   /* // 🔌 UNCOMMENT WHEN .NET IS READY
@@ -61,7 +59,6 @@ const Inventory = ({ role }) => {
     // 🔌 .NET API: await fetch(`.../api/inventory/${id}/decrease`, { method: 'PUT' });
   };
 
-  // --- LOGIC: Edit Modal Actions ---
   const handleOpenEditModal = (id) => {
     const productToEdit = inventory.find(item => item.id === id);
     setEditingProduct(productToEdit);
@@ -93,13 +90,36 @@ const Inventory = ({ role }) => {
     */
   };
 
-  // --- LOGIC: Search Filter ---
-  // This looks at your search bar text and filters the table automatically
+  const handleSort = (key, direction) => {
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    } else if (sortConfig.key === key && sortConfig.direction === 'descending') {
+      direction = 'ascending';  
+    }
+    setSortConfig({key, direction})
+  }
+
   const filteredInventory = inventory.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     item.id.includes(searchQuery)
   );
 
+  const sortedData = [...filteredInventory].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending'? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'descending'? 1 : 1;
+    }
+    return 0;
+  });
+
+  // --- LOGIC: Edit Modal Actions ---
+  
+
+  // --- LOGIC: Search Filter ---
+  // This looks at your search bar text and filters the table automatically
+  
   return (
     <div className="flex flex-col h-full animate-fade-in font-montserrat relative">
       
@@ -156,7 +176,9 @@ const Inventory = ({ role }) => {
 
       <DataTable 
         headers={productTableHeaders}
-        data={filteredInventory}
+        data={sortedData}
+        onSort={handleSort}
+        sortConfig={sortConfig}
         renderActions={(item) => {
           return(
           <>

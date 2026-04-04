@@ -1,5 +1,5 @@
 import { Boxes, Clock, TrendingUpDownIcon, TriangleAlertIcon } from "lucide-react";
-import StatusCard from "../components/dashboard_components/StatusCard";
+import StatusCard from "../components/data_components/StatusCard";
 
 const DashboardHome = ({ role }) => {
 

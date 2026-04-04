@@ -5,6 +5,7 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
   const [currentDate, setCurrentDate] = useState("");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("Sta. Lucia");
+  
 
   useEffect(() => {
     const options = { timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit' };
