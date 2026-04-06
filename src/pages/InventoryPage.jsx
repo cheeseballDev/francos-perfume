@@ -127,13 +127,20 @@ const Inventory = ({ role }) => {
   }
 
   const filteredInventory = inventory.filter(item => {
+
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.id.includes(searchQuery)
 
-    const matchesType = filters.type === "" || filters.type === "All Types" || item.type === filters.type;
-    const matchesBranch = filters.branch === "" || filters.branch === "All Branches" || item.branch === filters.branch;
-    const matchesGender = filters.gender === "" || filters.gender === "All Genders" || item.gender === filters.gender;
+    const matchesAllDropDowns = Object.keys(filters).every((key) => {
+      const currentDropDownItem = filters[key]
 
-    return matchesSearch && matchesType && matchesBranch && matchesGender;
+      const item = filterSelections.find((s) => s.key === key);
+      const allLabel = item?.filter[0];
+
+      return currentDropDownItem === allLabel || item[key] === currentDropDownItem;
+    })
+
+    return matchesSearch && matchesAllDropDowns
+
   });
 
   const sortedData = [...filteredInventory].sort((a, b) => {

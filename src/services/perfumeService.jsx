@@ -5,5 +5,6 @@ export const getInventory = async () => {
 }
 
 export const updateStock = async () => {
-    
+
 }
+

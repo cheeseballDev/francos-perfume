@@ -13,7 +13,7 @@ const RequestPage = () => {
     }
 
     const filterSelections = [
-        { key: 'perfume', label: 'Perfume', options: ['']},
+        { key: 'perfume', label: 'Perfume', options: ['Perfume']},
         { key: 'status', label: 'Status', options: ['Pending', 'Denied', 'Cancelled', 'Received']},
         { key: 'requested_from', label: 'Requested From', options: ['Requested From']},
         { key: 'sent_to', label: 'Sent To', options: ['Sent To']}
