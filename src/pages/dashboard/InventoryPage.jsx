@@ -1,5 +1,5 @@
+import InventoryTable from "@/components/features/inventory_components/InventoryTable";
 import { useState } from "react";
-import DataTable from "../../components/data_components/DataTable";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
 import FilterBar from "../../components/shared/FilterBar";
@@ -10,16 +10,6 @@ import SearchBar from "../../components/shared/SearchBar";
     TEMP DATA 
   */
 }
-const productTableHeaders = [
-  { label: "ID", key: "id", sortable: false },
-  { label: "Perfume", key: "name", sortable: true },
-  { label: "Type", key: "type", sortable: false },
-  { label: "Branch", key: "branch", sortable: false },
-  { label: "Note", key: "note", sortable: false },
-  { label: "Gender", key: "gender", sortable: false },
-  { label: "Date Created", key: "date", sortable: true },
-  { label: "Quantity", key: "qty", sortable: true },
-];
 
 const productTableData = [
   {
@@ -228,7 +218,7 @@ const Inventory = ({ role }) => {
 
     const matchesType =
       filters.type === "" ||
-      filters.type === "All Types" ||
+      filters.type === "All Perfume Types" ||
       item.type === filters.type;
     const matchesBranch =
       filters.branch === "" ||
@@ -304,35 +294,12 @@ const Inventory = ({ role }) => {
 
       {/* TABLE SECTION */}
 
-      <DataTable
-        headers={productTableHeaders}
+      <InventoryTable
+        role={role}
         data={sortedData}
-        onSort={handleSort}
-        sortConfig={sortConfig}
-        renderActions={(item) => {
-          return (
-            <>
-              <button
-                onClick={() => handleIncreaseQty(item.id)}
-                className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors"
-              >
-                +
-              </button>
-              <button
-                onClick={() => handleDecreaseQty(item.id)}
-                className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded text-gray-800 font-bold transition-colors"
-              >
-                -
-              </button>
-              <button
-                onClick={() => handleOpenEditModal(item.id)}
-                className="w-7 h-7 bg-[#E3D7C6] hover:bg-[#D6C9B8] rounded flex items-center justify-center transition-colors text-xs"
-              >
-                📝
-              </button>
-            </>
-          );
-        }}
+        onIncrease={handleIncreaseQty}
+        onDecrease={handleDecreaseQty}
+        onEdit={handleOpenEditModal}
       />
 
       <div className="py-4 flex justify-between items-center text-sm text-gray-500 border-t border-gray-100">

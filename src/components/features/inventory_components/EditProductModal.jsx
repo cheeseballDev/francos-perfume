@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const EditProductModal = ({ isOpen, onClose, product, onSave }) => {
+const EditProductModal = ({ isOpen, onClose, product, onSave, role}) => {
   // Local state to hold the "draft" edits
   const [formData, setFormData] = useState({
     name: '', type: '', branch: '', note: '', gender: '', qty: 0
