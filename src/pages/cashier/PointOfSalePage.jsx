@@ -1,10 +1,10 @@
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import logo from '../assets/FrancoPerfumeLogo.png';
-import DiscountModal from '../components/cashier_components/DiscountModal';
-import ProductCard from '../components/cashier_components/ProductCard';
-import ProductModal from '../components/cashier_components/ProductModal';
-import ProfileDropdown from '../components/general_components/ProfileDropdown';
+import logo from '../../assets/FrancoPerfumeLogo.png';
+import DiscountModal from '../../components/features/pos_components/DiscountModal';
+import ProductCard from '../../components/features/pos_components/ProductCard';
+import ProductModal from '../../components/features/pos_components/ProductModal';
+import ProfileDropdown from '../../components/shared/ProfileDropdown';
 
 const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
   const [cart, setCart] = useState([]);

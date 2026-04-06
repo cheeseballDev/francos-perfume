@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import logo from '../assets/FrancoPerfumeLogo.png';
 import { ChevronLeft } from 'lucide-react';
+import { useState } from 'react';
+import logo from '../../assets/FrancoPerfumeLogo.png';
 
 const StaffLogin = ({ onLogin }) => {
   // --- STATE ---

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import DataTable from "../components/data_components/DataTable";
-import FilterBar from "../components/general_components/FilterBar";
-import SearchBar from "../components/general_components/SearchBar";
-import AddProductModal from "../components/inventory_components/AddProductModal";
-import EditProductModal from "../components/inventory_components/EditProductModal";
+import DataTable from "../../components/data_components/DataTable";
+import AddProductModal from "../../components/features/inventory_components/AddProductModal";
+import EditProductModal from "../../components/features/inventory_components/EditProductModal";
+import FilterBar from "../../components/shared/FilterBar";
+import SearchBar from "../../components/shared/SearchBar";
 
 {
   /*

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import Header from '../../components/general_components/Header';
-import Sidebar from '../../components/general_components/Sidebar';
-import DashboardHome from '../../pages/DashboardHomePage'; // NEW IMPORT
-import Forecast from '../../pages/ForecastPage';
-import Inventory from '../../pages/InventoryPage';
-import POS from '../../pages/PointOfSalePage';
-import Request from '../../pages/RequestPage';
-import Transaction from '../../pages/TransactionsPage';
+import Header from '../components/shared/Header';
+import Sidebar from '../components/shared/Sidebar';
+import POS from '../pages/cashier/PointOfSalePage';
+import Forecast from '../pages/dashboard/ForecastPage';
+import DashboardHome from '../pages/dashboard/HomePage'; // NEW IMPORT
+import Inventory from '../pages/dashboard/InventoryPage';
+import Request from '../pages/dashboard/RequestPage';
+import Transaction from '../pages/dashboard/TransactionsPage';
 
 const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, onLogout }) => {
   const baseRole = trueRole ? trueRole.toLowerCase() : '';

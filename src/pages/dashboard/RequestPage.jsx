@@ -1,6 +1,6 @@
 import { useState } from "react";
-import FilterBar from "../components/general_components/FilterBar";
-import SearchBar from "../components/general_components/SearchBar";
+import FilterBar from "../../components/shared/FilterBar";
+import SearchBar from "../../components/shared/SearchBar";
 
 const RequestPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
