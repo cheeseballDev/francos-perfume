@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom'; // NEW: Outlet is the placeholder
 import Header from '../components/shared/Header';
 import Sidebar from '../components/shared/Sidebar';
-import Forecast from '../pages/dashboard/ForecastPage';
-import DashboardHome from '../pages/dashboard/HomePage'; // NEW IMPORT
-import Inventory from '../pages/dashboard/InventoryPage';
-import Request from '../pages/dashboard/RequestPage';
-import Transaction from '../pages/dashboard/TransactionsPage';
 import POS from '../pages/pos/PointOfSalePage';
+import Discount from '../pages/dashboard/DiscountPage'; // NEW
 
 const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, onLogout }) => {
   const baseRole = trueRole ? trueRole.toLowerCase() : '';
   const [currentActiveRole, setCurrentActiveRole] = useState(initialActiveRole ? initialActiveRole.toLowerCase() : baseRole);
-
+  
+  // We keep activeTab for now so the Sidebar knows what to highlight
   const isCashier = currentActiveRole === 'cashier staff' || currentActiveRole === 'cashier';
   const [activeTab, setActiveTab] = useState(isCashier ? 'POS' : 'Dashboard'); 
+
+  // NEW: This helps keep the Sidebar in sync with the URL
+  const location = useLocation();
 
   useEffect(() => {
     if (currentActiveRole === 'cashier staff') {
@@ -29,11 +30,7 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
 
   const canSwitchAccess = baseRole === 'manager';
 
-  {
-    /*
-      SET UI TO POS
-    */
-  }
+  // POS logic remains a "hijack" for now
   if (activeTab === 'POS') {
     return (
       <POS 
@@ -45,10 +42,10 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
     );
   }
 
-
   return (
     <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">
       <Sidebar role={currentActiveRole} activeTab={activeTab} setActiveTab={setActiveTab} />
+      
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <Header 
           role={currentActiveRole} 
@@ -58,17 +55,16 @@ const DashboardLayout = ({ trueRole, activeRole: initialActiveRole, userEmail, o
           onSwitchAccess={handleSwitchAccess} 
         />
         
-        {
-          /* 
-            ADD ALL PAGES HERE
-          */
-        }
         <main className="flex-1 p-8 overflow-auto bg-[#F7F7F9]">
-          {activeTab === 'Dashboard' && <DashboardHome role ={currentActiveRole}/>}
-          {activeTab === 'Inventory' && <Inventory role ={currentActiveRole}/>}
-          {activeTab === 'Forecast' && <Forecast />}
-          {activeTab === 'Requests' && <Request />}
-          {activeTab === 'Transactions' && <Transaction />}
+          {/* OLD MANUAL WAY (Remove these):
+            {activeTab === 'Dashboard' && <DashboardHome />} 
+          */}
+
+          {/* NEW ROUTER WAY:
+            The <Outlet /> will automatically render InventoryPage, RequestPage, or DiscountPage
+            depending on the URL in the browser (e.g., /inventory or /discount)
+          */}
+          <Outlet context={{ role: currentActiveRole }} />
         </main>
       </div>
     </div>
