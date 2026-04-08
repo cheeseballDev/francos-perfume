@@ -10,7 +10,7 @@ import Request from './pages/dashboard/RequestPage';
 import Discount from './pages/dashboard/DiscountPage';
 import DashboardHome from './pages/dashboard/HomePage';
 import Forecast from './pages/dashboard/ForecastPage';
-import Transaction from './pages/dashboard/TransactionsPage';
+import TransactionsPage from './pages/dashboard/TransactionsPage'; // FIXED: Changed 'Transaction' to 'TransactionsPage'
 import ManageAccounts from './pages/dashboard/ManageAccountsPage';
 
 const App = () => {
@@ -65,7 +65,7 @@ const App = () => {
           <Route path="inventory" element={<Inventory role={user?.activeRole} />} />
           <Route path="requests" element={<Request />} />
           <Route path="forecast" element={<Forecast />} />
-          <Route path="transactions" element={<Transaction />} />
+          <Route path="transactions" element={<TransactionsPage />} /> {/* Correctly matches the import now */}
           <Route path="discount" element={<Discount />} />
           <Route path="accounts" element={<ManageAccounts />} />
         </Route>

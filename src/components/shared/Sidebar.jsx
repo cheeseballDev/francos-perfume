@@ -71,8 +71,6 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           <p className="text-1xl">Requests</p>
         </Link>
 
-    
-
         {/* FORECAST */}
         <div
           onClick={() => setActiveTab("Forecast")}
@@ -83,13 +81,14 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
         </div>
 
         {isManager && (
-          <div
+          <Link
+            to="/transactions" // MUST match App.jsx path
             onClick={() => setActiveTab("Transactions")}
             className={getTabClass("Transactions")}
           >
             <FileClock size={24} />
             <p className="text-1xl">Transactions</p>
-          </div>
+          </Link>
         )}
 
         {isManager && (
@@ -104,14 +103,14 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
         {/* DISCOUNT - Now properly fixed and styled */}
         {isManager && (
-         <Link
-          to="/accounts"
-          onClick={() => setActiveTab("Accounts")}
-          className={getTabClass("Accounts")}
-        >
-          <UserPen size={24} />
-          <p className="text-1xl">Accounts</p>
-        </Link>
+          <Link
+            to="/accounts"
+            onClick={() => setActiveTab("Accounts")}
+            className={getTabClass("Accounts")}
+          >
+            <UserPen size={24} />
+            <p className="text-1xl">Accounts</p>
+          </Link>
         )}
 
         {isManager && (
@@ -123,8 +122,6 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
             <p className="text-1xl">Audit Log</p>
           </div>
         )}
-
-       
 
         {isManager && (
           <div
