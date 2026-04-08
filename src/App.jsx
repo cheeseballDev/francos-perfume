@@ -11,6 +11,7 @@ import Discount from './pages/dashboard/DiscountPage';
 import DashboardHome from './pages/dashboard/HomePage';
 import Forecast from './pages/dashboard/ForecastPage';
 import Transaction from './pages/dashboard/TransactionsPage';
+import ManageAccounts from './pages/dashboard/ManageAccountsPage';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="forecast" element={<Forecast />} />
           <Route path="transactions" element={<Transaction />} />
           <Route path="discount" element={<Discount />} />
+          <Route path="accounts" element={<ManageAccounts />} />
         </Route>
 
         {/* Fallback */}
