@@ -1,4 +1,5 @@
-import InventoryTable from "@/components/features/inventory_components/InventoryTable";
+import DataTable from "@/components/data_components/DataTable";
+import { Edit, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
@@ -64,50 +65,6 @@ const productTableData = [
   },
 ];
 
-const columns = [
-  {
-    header: () => 'id',
-    accessorKey: 'id',
-    enableSorting: false,
-  },
-  {
-    header: () => 'name',
-    accessorKey: 'name',
-    sortingFn: 'alphanumeric',
-  },
-  {
-    header: () => 'type',
-    accessorKey: 'type',
-    sortingFn: 'alphanumeric',
-  },
-  {
-    header: () => 'branch',
-    accessorKey: 'branch',
-    sortingFn: 'alphanumeric',
-  },
-  {
-    header: () => 'note',
-    accessorKey: 'note',
-    sortingFn: 'alphanumeric',
-  },
-  {
-    header: () => 'gender',
-    accessorKey: 'gender',
-    sortingFn: 'alphanumeric',
-  },
-  {
-    header: () => 'date',
-    accessorKey: 'date',
-    sortingFn: 'datetime',
-  },
-  {
-    header: () => 'qty',
-    accessorKey: 'qty',
-    sortingFn: 'basic',
-  }
-
-];
-
 const filterSelections = [
   {
     key: "type",
@@ -124,13 +81,8 @@ const filterSelections = [
     label: "Gender",
     options: ["All Genders", "Unisex", "Male", "Female"],
   },
-];
 
-{
-  /*
-    END OF TEMP DATA
-  */
-}
+];
 
 const Inventory = ({ role }) => {
   const isManager = role === "manager";
@@ -149,6 +101,69 @@ const Inventory = ({ role }) => {
   const [editingProduct, setEditingProduct] = useState(null);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  {
+    /*
+      ALL THE COLUMNS
+    */
+  }
+
+  const columns = [
+  {
+    header: 'ID',
+    accessorKey: 'id',
+    enableSorting: true,
+  },
+  {
+    header: 'Perfume Name',
+    accessorKey: 'name',
+    sortingFn: 'alphanumeric',
+  },
+  {
+    header: 'Perfume Type',
+    accessorKey: 'type',
+    sortingFn: 'alphanumeric',
+  },
+  {
+    header: 'Branch',
+    accessorKey: 'branch',
+    sortingFn: 'alphanumeric',
+  },
+  {
+    header: 'Note',
+    accessorKey: 'note',
+    sortingFn: 'alphanumeric',
+  },
+  {
+    header: 'Gender',
+    accessorKey: 'gender',
+    sortingFn: 'alphanumeric',
+  },
+  {
+    header: 'Date Created',
+    accessorKey: 'date',
+    sortingFn: 'datetime',
+  },
+  {
+    header: 'Quantity',
+    accessorKey: 'qty',
+    sortingFn: 'basic',
+  },
+  {
+    header: 'Actions',
+    id: 'actions',
+    cell: ({row}) => {
+      const item = row.original;
+        return (
+          <div className="flex gap-1">
+            <button className="bg-custom-primary" onClick={() => handleIncreaseQty(item.id)}> <Plus className="text-custom-black" size={16}/> </button>
+            <button className="bg-custom-primary" onClick={() => handleDecreaseQty(item.id)}> <Minus className="text-custom-black" size={16}/> </button>
+            <button className="bg-custom-primary" onClick={() => handleOpenEditModal(item.id, role)}> <Edit className="text-custom-black" size={16}/> </button>
+          </div>
+        )
+      }
+    }
+  ];
 
   const handleAddProduct = (newProduct) => {
     // 1. Give it a temporary fake ID until you connect a real database later
@@ -306,26 +321,11 @@ const Inventory = ({ role }) => {
 
       {/* TABLE SECTION */}
 
-      <InventoryTable
-        role={role}
+      <DataTable
         data={filteredInventory}
         columns={columns}
-        onIncrease={handleIncreaseQty}
-        onDecrease={handleDecreaseQty}
-        onEdit={handleOpenEditModal}
       />
 
-      <div className="py-4 flex justify-between items-center text-sm text-gray-500 border-t border-gray-100">
-        <p>Showing {filteredInventory.length} entries</p>
-        <div className="flex gap-2">
-          <button className="p-1 hover:text-gray-800 font-bold transition-colors">
-            {"<"}
-          </button>
-          <button className="p-1 hover:text-gray-800 font-bold transition-colors">
-            {">"}
-          </button>
-        </div>
-      </div>
 
       {/* --- OUR NEW EDIT COMPONENT --- */}
       <EditProductModal
