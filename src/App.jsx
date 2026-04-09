@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import MobileBlocker from './components/features/pos_components/MobileBlocker';
 import DashboardLayout from './layouts/DashboardLayout';
-import StaffLogin from './pages/auth/StaffLoginPage';
+import LoginPage from './pages/auth/LoginPage';
 
 // Pages - Ensure these paths match your actual file structure
-import Inventory from './pages/dashboard/InventoryPage';
-import Request from './pages/dashboard/RequestPage';
 import Discount from './pages/dashboard/DiscountPage';
-import DashboardHome from './pages/dashboard/HomePage';
 import Forecast from './pages/dashboard/ForecastPage';
-import TransactionsPage from './pages/dashboard/TransactionsPage'; // FIXED: Changed 'Transaction' to 'TransactionsPage'
+import DashboardHome from './pages/dashboard/HomePage';
+import Inventory from './pages/dashboard/InventoryPage';
 import ManageAccounts from './pages/dashboard/ManageAccountsPage';
+import Request from './pages/dashboard/RequestPage';
+import TransactionsPage from './pages/dashboard/TransactionsPage'; // FIXED: Changed 'Transaction' to 'TransactionsPage'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -41,7 +41,7 @@ const App = () => {
         {/* If not logged in, show Login. If logged in, redirect to Dashboard */}
         <Route 
           path="/login" 
-          element={!user ? <StaffLogin onLogin={handleLogin} /> : <Navigate to="/" />} 
+          element={!user ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/" />} 
         />
 
         {/* Dashboard Wrapper */}
