@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import FilterBar from "../../components/shared/FilterBar";
-import SearchBar from "../../components/shared/SearchBar";
-import CreateAccountModal from "../../components/features/accounts_components/CreateAccountModal";
+import { useEffect, useState } from "react";
 import AccountInfoModal from "../../components/features/accounts_components/AccountInfoModal";
+import CreateAccountModal from "../../components/features/accounts_components/CreateAccountModal";
 import EditAccountModal from "../../components/features/accounts_components/EditAccountModal";
+import FilterBar from "../../components/shared/FilterDropDown";
+import SearchBar from "../../components/shared/SearchBar";
 
 const initialAccounts = [
   { id: "001", email: "johnsmith@gmail.com", name: "John Smith", role: "Staff", branch: "Sta. Lucia", date: "09/09/2025", status: "Active" },

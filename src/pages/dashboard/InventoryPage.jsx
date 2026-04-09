@@ -4,7 +4,7 @@ import { Edit, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
-import FilterBar from "../../components/shared/FilterBar";
+import FilterBar from "../../components/shared/FilterDropDown";
 import SearchBar from "../../components/shared/SearchBar";
 
 {
@@ -103,11 +103,6 @@ const Inventory = ({ role }) => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  {
-    /*
-      ALL THE COLUMNS
-    */
-  }
 
   const columns = [
   {

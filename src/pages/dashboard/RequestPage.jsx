@@ -4,7 +4,7 @@ import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateRequestModal from "../../components/features/request_components/CreateRequestModal";
 import RequestDetailsModal from "../../components/features/request_components/RequestDetailsModal";
-import FilterBar from "../../components/shared/FilterBar";
+import FilterBar from "../../components/shared/FilterDropDown";
 import SearchBar from "../../components/shared/SearchBar";
 
 const initialRequestTableData = [
@@ -21,8 +21,8 @@ const initialRequestTableData = [
 ];
 
 const filterSelectionsTop = [
-  { key: "perfume", label: "Filter: Perfume", options: ["All Perfumes", "Apricot Spray", "Ocean Breeze", "Midnight Wood", "Citrus Bloom", "Velvet Rose"] },
-  { key: "status", label: "Filter: Status", options: ["Pending", "Denied", "Cancelled", "Received"] },
+  { key: "perfume", label: "All Perfumes", options: ["All Perfumes", "Apricot Spray", "Ocean Breeze", "Midnight Wood", "Citrus Bloom", "Velvet Rose"] },
+  { key: "status", label: "All Statuses", options: ["All Statuses", "Pending", "Denied", "Cancelled", "Received"] },
 ];
 
 const filterSelectionsBottom = [
@@ -33,7 +33,7 @@ const filterSelectionsBottom = [
 const RequestPage = () => {
   const [requests, setRequests] = useState(initialRequestTableData);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({ perfume: "", status: "", requested_from: "", sent_to: "", date_created: "" });
+  const [filters, setFilters] = useState({ perfume: "All Perfumes", status: "All Statuses", requested_from: "", sent_to: "", date_created: "" });
   const [activeTab, setActiveTab] = useState("inbound");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,7 +100,7 @@ const RequestPage = () => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = item.id.toLowerCase().includes(searchLower) || item.perfume.toLowerCase().includes(searchLower);
     const matchesPerfume = !filters.perfume || filters.perfume === "All Perfumes" || item.perfume === filters.perfume;
-    const matchesStatus = !filters.status || item.status.toLowerCase() === filters.status.toLowerCase();
+    const matchesStatus = !filters.status || filters.status === "All Statuses" || item.status.toLowerCase() === filters.status.toLowerCase();
     const matchesFrom = !filters.requested_from || filters.requested_from === "All Branches" || item.requestedFrom === filters.requested_from;
     const matchesTo = !filters.sent_to || filters.sent_to === "All Branches" || item.sentTo === filters.sent_to;
     const formattedDate = filters.date_created ? filters.date_created.replace(/-/g, "/") : "";
