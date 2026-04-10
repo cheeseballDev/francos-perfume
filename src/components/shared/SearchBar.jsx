@@ -11,7 +11,7 @@ const SearchBar = ({ value, onChange, placeholder = "Search by name or id..."}) 
         placeholder={placeholder}
         value={value} 
         onChange={onChange} // This triggers the parent's state update!
-        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-gray-400"
+        className="w-full pl-9 pr-4 py-2 border border-custom-gray-2 rounded text-sm focus:outline-none focus:border-custom-gray"
       />
     </div>
   );

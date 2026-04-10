@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import ProfileDropdown from './ProfileDropdown';
 
 const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
@@ -18,24 +19,24 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
 
   return (
     <>
-      <header className="h-16 bg-white border-b border-[#E5E5E5] flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
-        <div className="flex gap-8 text-[14px] text-gray-600 items-center">
-           <p><span className="font-semibold text-gray-800">Date:</span> {currentDate}</p>
-           
+      <header className="h-16 bg-white border-b border-custom-gray-2 flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
+        <div className="flex gap-8 text-[14px] text-custom-gray items-center">
+           <p><span className="font-semibold text-custom-black">Date:</span> {currentDate}</p>
+
            <div className="flex items-center gap-2">
-             <span className="font-semibold text-gray-800">Location:</span>
+             <span className="font-semibold text-custom-black">Location:</span>
              {canChangeLocation ? (
-               <select 
+               <select
                  value={selectedLocation}
                  onChange={(e) => setSelectedLocation(e.target.value)}
-                 className="border border-[#C0C0C0] rounded px-2 py-1 text-gray-700 bg-white text-sm cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-[#D4C4B0] transition-colors"
+                 className="border border-custom-gray rounded px-2 py-1 text-custom-black bg-white text-sm cursor-pointer hover:border-custom-gray focus:outline-none focus:ring-1 focus:ring-custom-primary transition-colors"
                >
                  <option value="All">All Branches</option>
                  <option value="Sta. Lucia">Sta. Lucia</option>
                  <option value="Riverbanks">Riverbanks</option>
                </select>
              ) : (
-               <span className="text-gray-600">Sta. Lucia</span>
+               <span className="text-custom-gray">Sta. Lucia</span>
              )}
            </div>
         </div>
@@ -53,17 +54,13 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
 
       {/* CONFIRMATION LOGOUT MODAL */}
       {showLogoutModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all">
-          <div className="bg-white p-8 rounded-md shadow-2xl max-w-sm w-full mx-4 border border-gray-100 animate-fade-in">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Sign Out</h3>
-            <p className="text-gray-600 mb-8 text-sm">Are you sure you want to end your current session?</p>
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all">
+          <div className="bg-white p-8 rounded-md shadow-2xl max-w-sm w-full mx-4 border border-custom-gray-2 animate-fade-in">
+            <h3 className="text-2xl font-bold text-custom-black mb-2 tracking-tight">Sign Out</h3>
+            <p className="text-custom-gray mb-8 text-sm">Are you sure you want to end your current session?</p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setShowLogoutModal(false)} className="px-5 py-2.5 border border-[#C0C0C0] rounded text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm">
-                Cancel
-              </button>
-              <button onClick={onLogout} className="px-5 py-2.5 bg-[#7D162E] text-white rounded font-medium hover:bg-[#631124] transition-colors text-sm">
-                Yes, Sign Out
-              </button>
+              <Button variant="outline" onClick={() => setShowLogoutModal(false)}>Cancel</Button>
+              <Button variant="destructive" onClick={onLogout}>Yes, Sign Out</Button>
             </div>
           </div>
         </div>

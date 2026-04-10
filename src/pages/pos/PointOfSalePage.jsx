@@ -1,4 +1,5 @@
 import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import logo from '../../assets/FrancoPerfumeLogo.png';
 import DiscountModal from '../../components/features/pos_components/DiscountModal';
@@ -98,9 +99,7 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
                 className="w-full bg-transparent border-b border-gray-500 text-white pl-10 py-1 text-lg focus:outline-none focus:border-white transition-colors placeholder-gray-500"
               />
             </div>
-            <button className="bg-white text-black px-6 py-2 font-bold text-sm rounded shadow hover:bg-gray-200 transition-colors">
-              Filter
-            </button>
+            <Button variant="outline">Filter</Button>
           </div>
         </div>
 
@@ -191,12 +190,12 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <span className="text-[15px] font-bold text-gray-700 block">DISCOUNT</span>
-                  <button onClick={() => setShowDiscountModal(true)} className="text-[11px] font-medium text-[#6FBA7B] hover:underline block mt-1">
+                  <Button variant="ghost" size="xs" className="text-custom-green hover:text-custom-green mt-1 px-0" onClick={() => setShowDiscountModal(true)}>
                     Add Discount {'>'}
-                  </button>
-                  <button onClick={handleRemoveDiscount} className="text-[11px] font-medium text-[#C16D81] hover:underline block mt-0.5">
+                  </Button>
+                  <Button variant="ghost" size="xs" className="text-custom-red hover:text-custom-red mt-0.5 px-0" onClick={handleRemoveDiscount}>
                     Remove Discount {'>'}
-                  </button>
+                  </Button>
                 </div>
                 <div className="text-right">
                   <span className="font-bold text-[15px] text-gray-800 block">P{discountAmount.toLocaleString()}</span>
@@ -212,15 +211,12 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
           </div>
 
           <div className="flex gap-3">
-           <button 
-              onClick={() => setShowCancelConfirm(true)} 
-              className="flex-1 bg-[#C18897] text-white py-3 rounded-md font-bold text-lg hover:bg-[#a87482] transition-colors shadow-sm tracking-wide"
-            >
+            <Button variant="destructive" size="lg" className="flex-1 text-lg font-bold tracking-wide" onClick={() => setShowCancelConfirm(true)}>
               CANCEL
-            </button>
-            <button className="flex-1 bg-[#94BE9F] text-white py-3 rounded-md font-bold text-lg hover:bg-[#7fa78a] transition-colors shadow-sm tracking-wide">
+            </Button>
+            <Button variant="success" size="lg" className="flex-1 text-lg font-bold tracking-wide">
               CHECKOUT
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -251,22 +247,12 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
             </h3>
             
             <div className="flex gap-4 justify-center">
-              <button 
-                onClick={() => {
-                  setCart([]); 
-                  setAppliedDiscountRate(0); 
-                  setShowCancelConfirm(false); 
-                }}
-                className="w-32 bg-[#529E58] text-white font-extrabold py-2.5 rounded hover:bg-[#438748] transition-colors tracking-widest text-[16px] shadow-sm"
-              >
+              <Button variant="success" className="w-32 font-extrabold tracking-widest" onClick={() => { setCart([]); setAppliedDiscountRate(0); setShowCancelConfirm(false); }}>
                 YES
-              </button>
-              <button 
-                onClick={() => setShowCancelConfirm(false)}
-                className="w-32 bg-[#7D162E] text-white font-extrabold py-2.5 rounded hover:bg-[#631124] transition-colors tracking-widest text-[16px] shadow-sm"
-              >
+              </Button>
+              <Button variant="destructive" className="w-32 font-extrabold tracking-widest" onClick={() => setShowCancelConfirm(false)}>
                 NO
-              </button>
+              </Button>
             </div>
 
           </div>

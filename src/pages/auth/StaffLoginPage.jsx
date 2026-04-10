@@ -1,3 +1,4 @@
+import { login } from '@/services/LoginService';
 import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
 import logo from '../../assets/FrancoPerfumeLogo.png';
@@ -5,7 +6,8 @@ import logo from '../../assets/FrancoPerfumeLogo.png';
 const StaffLogin = ({ onLogin }) => {
   // --- STATE ---
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [isManagerSelection, setIsManagerSelection] = useState(false); // NEW STATE
+  const [isManagerSelection, setIsManagerSelection] = useState(false);
+  //const [errorMessage, setErrorMessage] = useState('');
 
   // Form inputs
   const [email, setEmail] = useState('');
@@ -14,18 +16,18 @@ const StaffLogin = ({ onLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // --- HANDLERS ---
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    let simulatedRole = 'manager'; 
-    if (email.toLowerCase().includes('cashier')) simulatedRole = 'cashier staff';
-    if (email.toLowerCase().includes('inventory')) simulatedRole = 'inventory staff';
-    
-    if (simulatedRole === 'manager') {
-      setIsManagerSelection(true);
-    } else {
-      // Normal staff login: True role and Active role are the same
-      onLogin({ trueRole: simulatedRole, activeRole: simulatedRole, email: email });
+    try {
+      const result = await login(email, password);
+      if (result.role === 'manager') {
+        setIsManagerSelection(true);
+      } else {
+        onLogin({ trueRole: result.role, activeRole: result.role, email});
+      }
+    } catch (error) {
+      alert("Login failed: " + error.message);
     }
   };
 
