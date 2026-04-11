@@ -120,6 +120,10 @@ namespace InventorySystemBackend.Controllers
 
                 var request = new Requests
                 {
+                    // request_display_id is DatabaseGenerated(Computed) — the DB sets it.
+                    // We must supply a non-null placeholder to satisfy the C# `required`
+                    // keyword; EF Core will ignore this value on INSERT.
+                    request_display_id     = string.Empty,
                     product_id             = dto.product_id,
                     employee_id            = empId,
                     branch_id              = branchId,

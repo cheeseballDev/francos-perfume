@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router-dom"; // NEW: Outlet is the pl
 import Header from "../components/shared/Header";
 import Sidebar from "../components/shared/Sidebar";
 import POS from "../pages/pos/PointOfSalePage";
-import Discount from "../pages/dashboard/DiscountPage"; // NEW
 
 const DashboardLayout = ({
   trueRole,
@@ -53,7 +52,7 @@ const DashboardLayout = ({
   }
 
   return (
-    <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">
+    <div className="flex h-screen bg-custom-white text-custom-black font-montserrat text-[16px]">
       <Sidebar
         role={currentActiveRole}
         activeTab={activeTab}
@@ -69,7 +68,7 @@ const DashboardLayout = ({
           onSwitchAccess={handleSwitchAccess}
         />
 
-        <main className="flex-1 p-8 overflow-auto bg-[#F7F7F9]">
+        <main className="flex-1 p-8 overflow-auto bg-custom-white">
           <Outlet context={{ role: currentActiveRole }} />
         </main>
       </div>

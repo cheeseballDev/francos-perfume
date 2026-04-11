@@ -145,8 +145,9 @@ namespace InventorySystemBackend.Controllers
 
                 var archive = new ArchivedProducts
                 {
-                    // ← IMPORTANT: store product_id so RestoreProduct can look it up
-                    product_id          = product.product_id,
+                    // product_id is NOT a column on ArchivedProducts — the entity only stores
+                    // product_display_id (the human-readable string).  RestoreProduct uses
+                    // product_display_id to look the original row back up.
                     product_display_id  = product.product_display_id,
                     product_name        = product.product_name,
                     product_type        = product.product_type,
@@ -298,9 +299,11 @@ namespace InventorySystemBackend.Controllers
                 if (archive == null)
                     return NotFound("Archive record not found");
 
-                // Step 2: find the original product
+                // Step 2: find the original product by its display ID.
+                // ArchivedProducts has no product_id column — product_display_id is what
+                // was stored at archive time and is unique per product.
                 var product = await dbContext.Products
-                    .FirstOrDefaultAsync(x => x.product_id == archive.product_id);
+                    .FirstOrDefaultAsync(x => x.product_display_id == archive.product_display_id);
 
                 if (product == null)
                     return NotFound("Original product record not found — it may have been permanently deleted");

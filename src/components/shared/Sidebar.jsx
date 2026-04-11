@@ -63,13 +63,14 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
         </Link>
 
         {/* FORECAST */}
-        <div
+        <Link
+          to="/forecast"
           onClick={() => setActiveTab("Forecast")}
           className={getTabClass("Forecast")}
         >
           <ChartNoAxesCombined size={24} />
           <p className="text-1xl">Forecast</p>
-        </div>
+        </Link>
 
         {isManager && (
           <Link
@@ -83,13 +84,14 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
         )}
 
         {isManager && (
-          <div
+          <Link
+            to="/barcode"
             onClick={() => setActiveTab("Barcode")}
             className={getTabClass("Barcode")}
           >
             <Barcode size={24} />
             <p className="text-1xl">Barcode</p>
-          </div>
+          </Link>
         )}
 
         {/* DISCOUNT - Now properly fixed and styled */}
@@ -105,23 +107,25 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
         )}
 
         {isManager && (
-          <div
+          <Link
+            to="/audit-log"
             onClick={() => setActiveTab("Audit Log")}
             className={getTabClass("Audit Log")}
           >
             <Logs size={24} />
             <p className="text-1xl">Audit Log</p>
-          </div>
+          </Link>
         )}
 
         {isManager && (
-          <div
+          <Link
+            to="/archives"
             onClick={() => setActiveTab("Archives")}
             className={getTabClass("Archives")}
           >
             <Archive size={24} />
             <p className="text-1xl">Archives</p>
-          </div>
+          </Link>
         )}
       </div>
     </div>
