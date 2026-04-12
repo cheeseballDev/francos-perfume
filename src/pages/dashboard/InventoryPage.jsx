@@ -1,7 +1,7 @@
 import DataTable from "@/components/data_components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Edit, Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
 import FilterBar from "../../components/shared/FilterDropDown";
@@ -152,8 +152,8 @@ const Inventory = ({ role }) => {
       const item = row.original;
         return (
           <div className="flex gap-1">
-            <Button variant="primary" size="icon-sm" onClick={() => handleIncreaseQty(item.id)}><Plus size={14}/></Button>
-            <Button variant="primary" size="icon-sm" onClick={() => handleDecreaseQty(item.id)}><Minus size={14}/></Button>
+            <Button variant="primary" size="icon-sm" onClick={() => increment(item.id)}><Plus size={14}/></Button>
+            <Button variant="primary" size="icon-sm" onClick={() => decrement(item.id)}><Minus size={14}/></Button>
             <Button variant="primary" size="icon-sm" onClick={() => handleOpenEditModal(item.id, role)}><Edit size={14}/></Button>
           </div>
         )
@@ -182,23 +182,24 @@ const Inventory = ({ role }) => {
   */
 
   // --- LOGIC: Qty Buttons ---
-  const handleIncreaseQty = async (id) => {
+  const increment = useCallback(async (id) => {
     setInventory((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, qty: item.qty + 1 } : item,
       ),
     );
     // 🔌 .NET API: await fetch(`.../api/inventory/${id}/increase`, { method: 'PUT' });
-  };
+  }, []);
 
-  const handleDecreaseQty = async (id) => {
+  const decrement = useCallback(async (id) => {
     setInventory((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, qty: Math.max(0, item.qty - 1) } : item,
       ),
     );
     // 🔌 .NET API: await fetch(`.../api/inventory/${id}/decrease`, { method: 'PUT' });
-  };
+  }, []);
+
 
   const handleOpenEditModal = (id, role) => {
     const productToEdit = inventory.find((item) => item.id === id);
