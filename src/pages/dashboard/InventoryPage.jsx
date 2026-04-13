@@ -1,9 +1,10 @@
 import DataTable from "@/components/data_components/DataTable";
+import { Button } from "@/components/ui/button";
 import { Edit, Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
-import FilterBar from "../../components/shared/FilterBar";
+import FilterBar from "../../components/shared/FilterDropDown";
 import SearchBar from "../../components/shared/SearchBar";
 
 {
@@ -102,11 +103,6 @@ const Inventory = ({ role }) => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  {
-    /*
-      ALL THE COLUMNS
-    */
-  }
 
   const columns = [
   {
@@ -156,9 +152,9 @@ const Inventory = ({ role }) => {
       const item = row.original;
         return (
           <div className="flex gap-1">
-            <button className="bg-custom-primary" onClick={() => handleIncreaseQty(item.id)}> <Plus className="text-custom-black" size={16}/> </button>
-            <button className="bg-custom-primary" onClick={() => handleDecreaseQty(item.id)}> <Minus className="text-custom-black" size={16}/> </button>
-            <button className="bg-custom-primary" onClick={() => handleOpenEditModal(item.id, role)}> <Edit className="text-custom-black" size={16}/> </button>
+            <Button variant="primary" size="icon-sm" onClick={() => increment(item.id)}><Plus size={14}/></Button>
+            <Button variant="primary" size="icon-sm" onClick={() => decrement(item.id)}><Minus size={14}/></Button>
+            <Button variant="primary" size="icon-sm" onClick={() => handleOpenEditModal(item.id, role)}><Edit size={14}/></Button>
           </div>
         )
       }
@@ -186,23 +182,24 @@ const Inventory = ({ role }) => {
   */
 
   // --- LOGIC: Qty Buttons ---
-  const handleIncreaseQty = async (id) => {
+  const increment = useCallback(async (id) => {
     setInventory((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, qty: item.qty + 1 } : item,
       ),
     );
     // 🔌 .NET API: await fetch(`.../api/inventory/${id}/increase`, { method: 'PUT' });
-  };
+  }, []);
 
-  const handleDecreaseQty = async (id) => {
+  const decrement = useCallback(async (id) => {
     setInventory((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, qty: Math.max(0, item.qty - 1) } : item,
       ),
     );
     // 🔌 .NET API: await fetch(`.../api/inventory/${id}/decrease`, { method: 'PUT' });
-  };
+  }, []);
+
 
   const handleOpenEditModal = (id, role) => {
     const productToEdit = inventory.find((item) => item.id === id);
@@ -284,21 +281,18 @@ const Inventory = ({ role }) => {
 
         {/* We put the buttons in a flex container so they sit next to each other */}
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-[#E3D7C6] hover:bg-[#D6C9B8] text-gray-800 px-4 py-2 rounded font-medium transition-colors text-sm shadow-sm">
+          <Button variant="primary">
             <span className="text-lg">▤</span> Scan barcode
-          </button>
+          </Button>
 
-          {/* 
+          {/*
             CHECK IF USER IS MANAGER
           */}
 
           {isManager && (
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-2 bg-[#94BE9F] text-white px-5 py-2.5 rounded font-bold text-sm hover:bg-[#7fa78a] transition-colors shadow-sm"
-            >
+            <Button variant="success" onClick={() => setIsAddModalOpen(true)}>
               + ADD PRODUCT
-            </button>
+            </Button>
           )}
         </div>
       </div>

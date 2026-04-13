@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import ProfileDropdown from './ProfileDropdown';
 
 const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
@@ -58,12 +59,8 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
             <h3 className="text-2xl font-bold text-custom-black mb-2 tracking-tight">Sign Out</h3>
             <p className="text-custom-gray mb-8 text-sm">Are you sure you want to end your current session?</p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setShowLogoutModal(false)} className="px-5 py-2.5 border border-custom-gray rounded text-custom-black font-medium hover:bg-gray-50 transition-colors text-sm">
-                Cancel
-              </button>
-              <button onClick={onLogout} className="px-5 py-2.5 bg-custom-red text-white rounded font-medium hover:bg-custom-red/80 transition-colors text-sm">
-                Yes, Sign Out
-              </button>
+              <Button variant="outline" onClick={() => setShowLogoutModal(false)}>Cancel</Button>
+              <Button variant="destructive" onClick={onLogout}>Yes, Sign Out</Button>
             </div>
           </div>
         </div>

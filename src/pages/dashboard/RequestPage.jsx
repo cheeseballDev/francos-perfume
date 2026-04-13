@@ -1,9 +1,10 @@
 import DataTable from "@/components/data_components/DataTable";
+import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateRequestModal from "../../components/features/request_components/CreateRequestModal";
 import RequestDetailsModal from "../../components/features/request_components/RequestDetailsModal";
-import FilterBar from "../../components/shared/FilterBar";
+import FilterBar from "../../components/shared/FilterDropDown";
 import SearchBar from "../../components/shared/SearchBar";
 
 const initialRequestTableData = [
@@ -20,8 +21,8 @@ const initialRequestTableData = [
 ];
 
 const filterSelectionsTop = [
-  { key: "perfume", label: "Filter: Perfume", options: ["All Perfumes", "Apricot Spray", "Ocean Breeze", "Midnight Wood", "Citrus Bloom", "Velvet Rose"] },
-  { key: "status", label: "Filter: Status", options: ["Pending", "Denied", "Cancelled", "Received"] },
+  { key: "perfume", label: "All Perfumes", options: ["All Perfumes", "Apricot Spray", "Ocean Breeze", "Midnight Wood", "Citrus Bloom", "Velvet Rose"] },
+  { key: "status", label: "All Statuses", options: ["All Statuses", "Pending", "Denied", "Cancelled", "Received"] },
 ];
 
 const filterSelectionsBottom = [
@@ -32,7 +33,7 @@ const filterSelectionsBottom = [
 const RequestPage = () => {
   const [requests, setRequests] = useState(initialRequestTableData);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({ perfume: "", status: "", requested_from: "", sent_to: "", date_created: "" });
+  const [filters, setFilters] = useState({ perfume: "All Perfumes", status: "All Statuses", requested_from: "", sent_to: "", date_created: "" });
   const [activeTab, setActiveTab] = useState("inbound");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,7 +88,7 @@ const RequestPage = () => {
       cell: ({row}) => {
         const item = row.original;
         return (
-          <button className="bg-custom-primary" onClick={() => (setIsDetailsOpen(true), setSelectedRequest(item.id))}> <Eye size={16}/> View Details </button>    
+          <Button variant="primary" size="sm" onClick={() => { handleOpenDetails(item.id); }}><Eye size={14}/> View Details</Button>    
         )
       }
     }
@@ -99,7 +100,7 @@ const RequestPage = () => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = item.id.toLowerCase().includes(searchLower) || item.perfume.toLowerCase().includes(searchLower);
     const matchesPerfume = !filters.perfume || filters.perfume === "All Perfumes" || item.perfume === filters.perfume;
-    const matchesStatus = !filters.status || item.status.toLowerCase() === filters.status.toLowerCase();
+    const matchesStatus = !filters.status || filters.status === "All Statuses" || item.status.toLowerCase() === filters.status.toLowerCase();
     const matchesFrom = !filters.requested_from || filters.requested_from === "All Branches" || item.requestedFrom === filters.requested_from;
     const matchesTo = !filters.sent_to || filters.sent_to === "All Branches" || item.sentTo === filters.sent_to;
     const formattedDate = filters.date_created ? filters.date_created.replace(/-/g, "/") : "";
@@ -121,6 +122,10 @@ const RequestPage = () => {
     setRequests([newRequest, ...requests]);
   };
 
+  const handleOpenDetails = (id) => {
+    setSelectedRequest(id)
+    setIsDetailsOpen(true)
+  };
 
   return (
     <div className="flex flex-col h-full animate-fade-in relative">
@@ -140,9 +145,9 @@ const RequestPage = () => {
             <span className="absolute -top-4 left-0 text-[10px] text-custom-gray">Date Created:</span>
             <input type="date" value={filters.date_created} onChange={(e) => setFilters({ ...filters, date_created: e.target.value })} className="border border-custom-gray-2 rounded-md px-3 py-1.5 text-sm text-custom-gray focus:outline-none focus:ring-1 focus:ring-custom-gray" />
           </div>
-          <button onClick={handleClearFilters} className="border border-dashed border-custom-red/60 text-custom-red/60 px-4 py-1.5 rounded-md text-sm font-medium hover:bg-custom-red/10 transition-colors flex items-center gap-2">
-            <span className="text-lg leading-none">✕</span> Clear filters
-          </button>
+          <Button variant="outline-destructive" onClick={handleClearFilters}>
+            Clear filters
+          </Button>
         </div>
       </div>
 
@@ -155,9 +160,9 @@ const RequestPage = () => {
           <button onClick={() => setActiveTab("outbound")} className={`px-6 py-1.5 text-sm rounded-sm font-medium transition-colors ${activeTab === "outbound" ? "bg-custom-primary text-custom-black shadow-sm" : "text-custom-gray hover:text-custom-black"}`}>Outbound (4)</button>
         </div>
 
-        <button onClick={() => setIsModalOpen(true)} className="bg-custom-primary hover:bg-custom-primary/80 text-custom-black px-5 py-2 rounded font-medium text-sm transition-colors shadow-sm flex items-center gap-2">
+        <Button variant="primary" onClick={() => setIsModalOpen(true)}>
           <span className="text-lg leading-none">+</span> Create a new request
-        </button>
+        </Button>
       </div>
 
       {/* DATA TABLE */}

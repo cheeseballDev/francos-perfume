@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import FilterBar from "../../components/shared/FilterBar";
-import SearchBar from "../../components/shared/SearchBar";
-import CreateAccountModal from "../../components/features/accounts_components/CreateAccountModal";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import AccountInfoModal from "../../components/features/accounts_components/AccountInfoModal";
+import CreateAccountModal from "../../components/features/accounts_components/CreateAccountModal";
 import EditAccountModal from "../../components/features/accounts_components/EditAccountModal";
+import FilterBar from "../../components/shared/FilterDropDown";
+import SearchBar from "../../components/shared/SearchBar";
 
 const initialAccounts = [
   { id: "001", email: "johnsmith@gmail.com", name: "John Smith", role: "Staff", branch: "Sta. Lucia", date: "09/09/2025", status: "Active" },
@@ -94,18 +95,15 @@ const ManageAccountsPage = () => {
           />
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#E5D5C1] hover:bg-[#d4c2ab] text-gray-800 px-5 py-2 rounded font-medium text-sm transition-colors shadow-sm flex items-center gap-2"
-        >
+        <Button variant="primary" onClick={() => setIsModalOpen(true)}>
           <span className="text-xl leading-none">+</span> Create New Account
-        </button>
+        </Button>
       </div>
 
       <h2 className="text-2xl font-bold text-[#333] mb-6">Accounts List</h2>
 
       {/* DATA TABLE */}
-      <div className="overflow-hidden min-h-[450px]">
+      <div className="overflow-hidden min-h-112.5">
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-[12px] text-gray-400 uppercase bg-transparent border-b border-gray-100">
             <tr>
@@ -134,15 +132,9 @@ const ManageAccountsPage = () => {
                   <td className="px-4 py-4">{user.date}</td>
                   <td className="px-4 py-4 text-gray-700 font-medium">{user.status}</td>
                   <td className="px-4 py-4 text-center">
-                    <button
-                      onClick={() => {
-                        setSelectedAccount(user);
-                        setIsInfoModalOpen(true);
-                      }}
-                      className="bg-[#E5D5C1] px-4 py-1.5 rounded text-gray-800 text-xs font-bold transition-colors hover:bg-[#d4c2ab] shadow-sm"
-                    >
+                    <Button variant="primary" size="sm" onClick={() => { setSelectedAccount(user); setIsInfoModalOpen(true); }}>
                       ••• View
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))

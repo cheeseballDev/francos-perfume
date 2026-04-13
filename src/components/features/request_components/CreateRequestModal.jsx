@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 const CreateRequestModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -68,9 +69,9 @@ const CreateRequestModal = ({ isOpen, onClose, onSave }) => {
 
           <span className="text-custom-gray text-sm font-medium">Quantity:</span>
           <div className="flex items-center gap-2">
-            <button onClick={() => setFormData({ ...formData, qty: formData.qty + 1 })} className="w-10 h-10 bg-custom-primary rounded-md font-bold text-custom-black flex items-center justify-center hover:bg-custom-primary/80 transition-colors shadow-sm">+</button>
+            <Button variant="primary" size="icon-sm" onClick={() => setFormData({ ...formData, qty: formData.qty + 1 })}>+</Button>
             <div className="w-20 h-10 border border-custom-gray rounded-md flex items-center justify-center bg-white text-sm font-medium shadow-sm">{formData.qty}</div>
-            <button onClick={() => setFormData({ ...formData, qty: Math.max(0, formData.qty - 1) })} className="w-10 h-10 bg-custom-primary rounded-md font-bold text-custom-black flex items-center justify-center hover:bg-custom-primary/80 transition-colors shadow-sm">—</button>
+            <Button variant="primary" size="icon-sm" onClick={() => setFormData({ ...formData, qty: Math.max(0, formData.qty - 1) })}>—</Button>
           </div>
 
           <span className="text-custom-gray text-sm font-medium">Requested From:</span>
@@ -90,8 +91,8 @@ const CreateRequestModal = ({ isOpen, onClose, onSave }) => {
         </div>
 
         <div className="flex gap-3 justify-center mt-10">
-          <button onClick={onClose} className="px-6 py-2.5 bg-custom-primary text-custom-black rounded-md hover:bg-custom-primary/80 font-medium text-sm flex items-center gap-2 transition-colors shadow-sm"><span className="text-lg">✕</span> Cancel</button>
-          <button onClick={handleSubmit} className="px-6 py-2.5 bg-custom-primary text-custom-black rounded-md hover:bg-custom-primary/80 font-medium text-sm flex items-center gap-2 transition-colors shadow-sm"><span className="text-lg">✓</span> Submit Request</button>
+          <Button variant="primary" onClick={onClose}><span className="text-lg">✕</span> Cancel</Button>
+          <Button variant="primary" onClick={handleSubmit}><span className="text-lg">✓</span> Submit Request</Button>
         </div>
       </div>
     </div>

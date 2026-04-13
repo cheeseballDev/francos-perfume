@@ -1,4 +1,4 @@
-import React from 'react';
+import { Button } from '@/components/ui/button';
 
 const RequestDetailsModal = ({ isOpen, onClose, request, onUpdateStatus }) => {
   if (!isOpen || !request) return null;
@@ -100,30 +100,19 @@ const RequestDetailsModal = ({ isOpen, onClose, request, onUpdateStatus }) => {
 
         {/* FOOTER BUTTONS */}
         <div className="flex justify-between items-center mt-8">
-          <button
-            onClick={onClose}
-            className="px-6 py-2 bg-custom-primary text-custom-black rounded-md hover:bg-custom-primary/80 font-medium text-sm transition-colors"
-          >
-            ‹ Go back
-          </button>
+          <Button variant="primary" onClick={onClose}>‹ Go back</Button>
 
           {/* CONDITIONAL ACTION BUTTONS: Only show if not finalized */}
           {!isFinished && (
             <>
               {isInbound ? (
-                <button
-                  className="px-6 py-2 border-2 border-custom-green text-custom-green rounded-md hover:bg-custom-green/10 font-bold text-sm flex items-center gap-2 transition-colors"
-                  /* onClick={() => handleStatusUpdate('RECEIVED')} */
-                >
+                <Button variant="success-outline" /* onClick={() => handleStatusUpdate('RECEIVED')} */>
                   ✓ Items Received
-                </button>
+                </Button>
               ) : (
-                <button
-                  className="px-6 py-2 border-2 border-custom-red text-custom-red rounded-md hover:bg-custom-red/10 font-bold text-sm flex items-center gap-2 transition-colors"
-                  /* onClick={() => handleStatusUpdate('CANCELLED')} */
-                >
+                <Button variant="destructive-outline" /* onClick={() => handleStatusUpdate('CANCELLED')} */>
                   ✕ Cancel Request
-                </button>
+                </Button>
               )}
             </>
           )}

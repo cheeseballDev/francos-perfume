@@ -1,10 +1,9 @@
-import { CircleQuestionMark } from 'lucide-react';
 
 const StatusCard = ({
     title, 
     mainValue = "0", 
     subText,
-    Icon = CircleQuestionMark, 
+    Icon = null, 
     color = "text-custom-black",
     secondValue,
     thirdValue,
