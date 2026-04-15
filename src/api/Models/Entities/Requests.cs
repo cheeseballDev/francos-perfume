@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("requesttable")]
+    [Table("request")]
     public class Requests
     {
         [Key]

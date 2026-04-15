@@ -27,15 +27,15 @@ namespace InventorySystemBackend.Controllers
                     .First(c => c.Type == "branch_id").Value);
 
             var inventory = await dbContext.Inventories
-                .Where(i => i.branch_id == branch_id && i.product_qty > 0 && i.Products.product_status == "active")
-                .Select(i => new InventoryDisplayDTO
+                //.Where(i => i.branch_id == branch_id && i.product_qty > 0 && i.Products.product_status == "active")
+                .Select(i => new InventoryDTO
                 {
-                    ProductId = i.product_id,
-                    ProductDisplayId = i.Products.product_display_id,
-                    ProductName = i.Products.product_name,
-                    ProductType = i.Products.product_type,
-                    ProductStatus = i.Products.product_status,
-                    Quantity = i.product_qty
+                    product_id = i.product_id,
+                    product_display_id = i.Products.product_display_id,
+                    product_name = i.Products.product_name,
+                    product_type = i.Products.product_type,
+                    product_status = i.Products.product_status,
+                    quantity = i.product_qty
                 })
                 .ToListAsync();
 
@@ -116,25 +116,30 @@ namespace InventorySystemBackend.Controllers
         [HttpPatch("updateQuantity/{id:int}")]
         public async Task<IActionResult> UpdateQuantity(int id, int qty)
         {
-            var inventory = await dbContext.Inventories
-                .FirstOrDefaultAsync(i => i.product_id == id);
+            var claims = new ClaimsGetter(User);
+            var branch_id = int.Parse(claims.branchId);
 
-            if (inventory == null)
+            var existingInventory = await dbContext.Inventories
+                .FirstOrDefaultAsync(i =>
+                    i.product_id == id &&
+                    i.branch_id == branch_id);
+
+            if (existingInventory == null)
                 return NotFound();
 
-            int updatedQty = inventory.product_qty + qty;
+            var updatedQty = existingInventory.product_qty + qty;
 
-            if (updatedQty <= 0)
-                return BadRequest("Product cannot be set to zero or negative.");
+            if (updatedQty < 0)
+                return BadRequest("Product cannot be negative.");
 
-            inventory.product_qty += updatedQty;
+            existingInventory.product_qty = updatedQty;
 
             await dbContext.SaveChangesAsync();
 
             return Ok(new
             {
-                inventory.product_id,
-                inventory.product_qty
+                existingInventory.product_id,
+                existingInventory.product_qty
             });
         }
     }

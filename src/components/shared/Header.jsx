@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 import ProfileDropdown from './ProfileDropdown';
 
 const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
@@ -44,6 +44,7 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
         {/* OUR CLEAN NEW COMPONENT */}
         <ProfileDropdown 
           userEmail={userEmail} 
+          userRole={normalizedRole}
           onLogout={() => setShowLogoutModal(true)} 
           canSwitchAccess={canSwitchAccess} 
           onSwitchAccess={onSwitchAccess} 

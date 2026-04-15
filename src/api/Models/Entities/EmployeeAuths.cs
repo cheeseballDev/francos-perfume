@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("employeeauthenticationtable")]
+    [Table("employee_authentication")]
     public class EmployeeAuths
     {
         [Key]

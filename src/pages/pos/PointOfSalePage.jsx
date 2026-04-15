@@ -1,16 +1,16 @@
-import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import logo from '../../assets/FrancoPerfumeLogo.png';
+import CashPaymentModal from '../../components/features/pos_components/CashPaymentModal';
+import CheckoutModal from '../../components/features/pos_components/CheckoutModal';
 import DiscountModal from '../../components/features/pos_components/DiscountModal';
+import GCashPaymentModal from '../../components/features/pos_components/GCashPaymentModal';
 import ProductCard from '../../components/features/pos_components/ProductCard';
 import ProductModal from '../../components/features/pos_components/ProductModal';
 import ProfileDropdown from '../../components/shared/ProfileDropdown';
-import CheckoutModal from '../../components/features/pos_components/CheckoutModal'; 
-import CashPaymentModal from '../../components/features/pos_components/CashPaymentModal';
-import GCashPaymentModal from '../../components/features/pos_components/GCashPaymentModal';
 
-const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
+const POS = ({ userEmail, userRole, onLogout, canSwitchAccess, onSwitchAccess }) => {
   const [cart, setCart] = useState([]);
   const [activeType, setActiveType] = useState('ALL'); 
   const [activeGender, setActiveGender] = useState('ALL'); 
@@ -192,6 +192,7 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
         {/* PROFILEDROPDOWN COMPONENT */}
         <ProfileDropdown 
           userEmail={userEmail} 
+          userRole={'cashier staff'}
           onLogout={onLogout} 
           canSwitchAccess={canSwitchAccess} 
           onSwitchAccess={onSwitchAccess} 

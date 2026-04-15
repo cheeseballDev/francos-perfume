@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("auditlogtable")]
+    [Table("audit_log")]
     public class AuditLogs
     {
         [Key]

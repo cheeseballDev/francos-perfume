@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("inventorytable")]
+    [Table("inventory")]
     public class Inventory
     {
         public int product_id { get; set; }

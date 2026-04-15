@@ -57,7 +57,10 @@ namespace InventorySystemBackend.Controllers
                     product_gender = dto.product_gender,
                     product_barcode = dto.product_barcode,
                     product_date_created = DateTime.UtcNow,
-                    product_status = "active"
+                    product_status = "active",
+                    product_description = dto.product_description,
+                    product_price = dto.product_price,
+                    product_image_url = dto.product_image_url
                 };
 
                 dbContext.Products.Add(products);
@@ -85,18 +88,12 @@ namespace InventorySystemBackend.Controllers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                await dbContext.Database.ExecuteSqlRawAsync(@"
-                    SELECT setval(
-                        'productstable_product_id_seq',
-                        (SELECT MAX(product_id) FROM productstable)
-                    );
-                ");
                 return StatusCode(500, ex.ToString());
             }
         }
 
         [HttpPut("updateProduct/{id:int}")]
-        public async Task<IActionResult> UpdateEmployeeProfile(int id, UpdateProductDTO update)
+        public async Task<IActionResult> UpdateEmployeeProfile(int id, UpdateProductDTO dto)
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync();
 
@@ -111,14 +108,14 @@ namespace InventorySystemBackend.Controllers
                 if (products == null)
                     return NotFound();
 
-                products.product_name = update.product_name;
-                products.product_type = update.product_type;
-                products.product_note = update.product_note;
-                products.product_gender = update.product_gender;
-                products.product_date_created = update.product_date_created;
-                products.product_barcode = update.product_barcode;
-                products.product_status = update.product_status;
-                products.product_description = update.product_description;
+                products.product_name = dto.product_name;
+                products.product_type = dto.product_type;
+                products.product_note = dto.product_note;
+                products.product_gender = dto.product_gender;
+                products.product_barcode = dto.product_barcode;
+                products.product_description = dto.product_description;
+                products.product_price = dto.product_price;
+                products.product_image_url = dto.product_image_url;
 
                 await dbContext.SaveChangesAsync();
 

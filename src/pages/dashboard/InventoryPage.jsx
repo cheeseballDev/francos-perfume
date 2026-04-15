@@ -1,70 +1,14 @@
 import DataTable from "@/components/data_components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Edit, Minus, Plus } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddProductModal from "../../components/features/inventory_components/AddProductModal";
 import EditProductModal from "../../components/features/inventory_components/EditProductModal";
 import FilterBar from "../../components/shared/FilterDropDown";
 import SearchBar from "../../components/shared/SearchBar";
+import { fetchAllInventory } from "../../services/InventoryService";
 
-{
-  /*
-    TEMP DATA 
-  */
-}
 
-const productTableData = [
-  {
-    id: "01",
-    name: "Apricot",
-    type: "Premium",
-    branch: "Sta. Lucia",
-    note: "Karat",
-    gender: "Male",
-    date: "09-09-2025",
-    qty: 100,
-  },
-  {
-    id: "02",
-    name: "Ocean Breeze",
-    type: "Premium",
-    branch: "Sta. Lucia",
-    note: "Karat",
-    gender: "Female",
-    date: "09-09-2025",
-    qty: 100,
-  },
-  {
-    id: "03",
-    name: "Midnight Wood",
-    type: "Premium",
-    branch: "Sta. Lucia",
-    note: "Karat",
-    gender: "Male",
-    date: "09-09-2025",
-    qty: 100,
-  },
-  {
-    id: "04",
-    name: "Citrus Bloom",
-    type: "Premium",
-    branch: "Sta. Lucia",
-    note: "Apricot",
-    gender: "Male",
-    date: "09-09-2025",
-    qty: 100,
-  },
-  {
-    id: "05",
-    name: "Velvet Rose",
-    type: "Premium",
-    branch: "Sta. Lucia",
-    note: "Apricot",
-    gender: "Female",
-    date: "09-09-2025",
-    qty: 100,
-  },
-];
 
 const filterSelections = [
   {
@@ -96,28 +40,44 @@ const Inventory = ({ role }) => {
     gender: "All Genders",
   });
 
-  const [inventory, setInventory] = useState(productTableData);
+  const [inventory, setInventory] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+  useEffect(() => {
+    const getInventoryData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchAllInventory();
+        console.log(data);
+        setInventory(data);
+      } catch (error) {
+        alert("Inventory failed: " + error.message);
+      }
+    }
+    getInventoryData();
+  })
+
 
   const columns = [
   {
     header: 'ID',
-    accessorKey: 'id',
+    accessorKey: 'product_display_id',
     enableSorting: true,
   },
   {
     header: 'Perfume Name',
-    accessorKey: 'name',
+    accessorKey: 'product_name',
     sortingFn: 'alphanumeric',
   },
   {
     header: 'Perfume Type',
-    accessorKey: 'type',
+    accessorKey: 'product_type',
     sortingFn: 'alphanumeric',
   },
   {
@@ -127,22 +87,22 @@ const Inventory = ({ role }) => {
   },
   {
     header: 'Note',
-    accessorKey: 'note',
+    accessorKey: 'product_note',
     sortingFn: 'alphanumeric',
   },
   {
     header: 'Gender',
-    accessorKey: 'gender',
+    accessorKey: 'product_gender',
     sortingFn: 'alphanumeric',
   },
   {
     header: 'Date Created',
-    accessorKey: 'date',
+    accessorKey: 'product_date_created',
     sortingFn: 'datetime',
   },
   {
     header: 'Quantity',
-    accessorKey: 'qty',
+    accessorKey: 'product_quantity',
     sortingFn: 'basic',
   },
   {

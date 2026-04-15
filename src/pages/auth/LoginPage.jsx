@@ -1,44 +1,62 @@
 import { login } from '@/services/LoginService';
 import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/FrancoPerfumeLogo.png';
 
-const StaffLogin = ({ onLogin }) => {
+const LoginPage = ({ onLogin }) => {
+  const navigate = useNavigate();
+  const [view, setView] = useState('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [trueRole, setTrueRole] = useState('');
+  const [branch, setBranch] = useState('');
+
+  //const [errorMessage, setErrorMessage] = useState('');
+
   // --- STATE ---
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isManagerSelection, setIsManagerSelection] = useState(false);
-  //const [errorMessage, setErrorMessage] = useState('');
-
-  // Form inputs
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  
+  
   const [otp, setOtp] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // --- HANDLERS ---
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     try {
       const result = await login(email, password);
-      if (result.role === 'manager') {
-        setIsManagerSelection(true);
+      setTrueRole(result.trueRole);
+      setBranch(result.branch);
+
+      if (trueRole === 'manager') {
+        setView('module');
       } else {
-        onLogin({ trueRole: result.role, activeRole: result.role, email});
-      }
+        onLogin({
+          email,
+          token: result.token,
+          trueRole: result.trueRole,
+          activeRole: result.trueRole,
+          branch: result.branch
+        });
+        navigate(result.trueRole === 'cashier' ? '/pos' : '/home');
+      } 
+
     } catch (error) {
       alert("Login failed: " + error.message);
     }
   };
 
-  const handleManagerModuleSelect = (moduleName) => {
-    if (moduleName === 'Cashier') {
-      // True Role = Manager. Active Role = Cashier.
-      onLogin({ trueRole: 'manager', activeRole: 'cashier staff', email: email });
-    } else if (moduleName === 'Inventory') {
-      // True Role = Manager. Active Role = Manager.
-      onLogin({ trueRole: 'manager', activeRole: 'manager', email: email });
-    }
+  const handleModuleSelect = (module) => {
+    onLogin({
+      email,
+      token: sessionStorage.getItem('token'),
+      trueRole,
+      activeRole: module,
+      branch
+    })
   };
 
   const handleResetPassword = (e) => {
@@ -52,9 +70,30 @@ const StaffLogin = ({ onLogin }) => {
 
   const displayName = email ? email.split('@')[0] : 'User';
 
+  if (view === 'module') {
+    return (
+      <div className="w-full flex flex-col items-center mt-8">
+        <h2 className="text-[24px] font-bold text-[#333] mb-1 tracking-tight">Select A Module</h2>
+        <p className="text-gray-500 mb-10 text-sm">Welcome back {displayName}.</p>
+        
+        <button 
+          onClick={() => handleModuleSelect('cashier')}
+          className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm mb-4"
+        >
+          Access POS
+        </button>
+        
+        <button 
+          onClick={() => handleModuleSelect('inventory')}
+          className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm"
+        >
+          Access Dashboard
+        </button>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F7F7F9] font-montserrat p-4 relative">
-      
       {/* GO BACK BUTTON (Visible for Forgot Password OR Manager Selection) */}
       {(isForgotPassword || isManagerSelection) && (
         <div 
@@ -70,30 +109,6 @@ const StaffLogin = ({ onLogin }) => {
       )}
 
       <div className="w-full max-w-sm flex flex-col items-center">
-        
-        {/* --- SCREEN 3: MANAGER MODULE SELECTION --- */}
-        {isManagerSelection ? (
-          <div className="w-full flex flex-col items-center mt-8">
-            <h2 className="text-[24px] font-bold text-[#333] mb-1 tracking-tight">Select A Module</h2>
-            <p className="text-gray-500 mb-10 text-sm">Welcome back {displayName}.</p>
-            
-            <button 
-              onClick={() => handleManagerModuleSelect('Cashier')}
-              className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm mb-4"
-            >
-              Access POS
-            </button>
-            
-            <button 
-              onClick={() => handleManagerModuleSelect('Inventory')}
-              className="w-full bg-[#D4C4B0] text-[#333] rounded py-3 font-medium hover:bg-[#c2b09a] transition-colors text-sm shadow-sm"
-            >
-              Access Dashboard
-            </button>
-          </div>
-        ) : (
-          
-          /* --- SCREENS 1 & 2: LOGIN & FORGOT PASSWORD --- */
           <>
             <img src={logo} alt="Franco's Logo" className="h-24 w-auto object-contain mb-4" />
             <h1 className="text-[28px] font-bold text-[#333] mb-1 tracking-tight">OneFrancoScentHub</h1>
@@ -163,10 +178,9 @@ const StaffLogin = ({ onLogin }) => {
               </form>
             )}
           </>
-        )}
       </div>
     </div>
   );
 };
 
-export default StaffLogin;
+export default LoginPage;

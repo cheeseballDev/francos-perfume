@@ -56,8 +56,9 @@ namespace InventorySystemBackend.Controllers
         [HttpGet("profile")]
         public IActionResult GetProfile()
         {
-            var empId = User.GetEmployeeId();
-            var profile = dbContext.EmployeeProfiles.FirstOrDefault(x => x.employee_id.ToString() == empId);
+            var claims = new ClaimsGetter(User);
+            var employeeId = Convert.ToInt32(claims.employeeId);
+            var profile = dbContext.EmployeeProfiles.FirstOrDefault(x => x.employee_id == employeeId);
             return Ok(new { profile });
         }
 
@@ -149,13 +150,6 @@ namespace InventorySystemBackend.Controllers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-
-                await dbContext.Database.ExecuteSqlRawAsync(@"
-                    SELECT setval(
-                    'employeeprofiletable_employee_id_seq',
-                    (SELECT MAX(employee_id) FROM employeeprofiletable)
-                    );");
-
                 return StatusCode(500, ex.ToString());
             }
         }

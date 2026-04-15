@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("branchtable")]
+    [Table("branch")]
     public class Branches
     {
         [Key]
@@ -13,5 +13,6 @@ namespace InventorySystemBackend.Models.Entities
         public required string branch_display_id { get; set; }
         public required string branch_location { get; set; }
         public required string branch_status { get; set; }
+        //public ICollection<Branches> Branch { get; set; } = new List<Branches>();
     }
 }

@@ -7,23 +7,29 @@ import {
   HandHelping,
   LayoutDashboard,
   Logs,
-  UserPen,
-  Tag // Added for Discount
+  Tag,
+  UserPen
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/FrancoPerfumeLogo.png";
 
-const Sidebar = ({ role, activeTab, setActiveTab }) => {
+const Sidebar = ({ role }) => {
+  const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState("Dashboard");
+
   const companyPictureAlt = "Franco's Logo";
   const normalizedRole = role ? role.toLowerCase() : "";
   const isManager = normalizedRole === "manager";
 
-  const getTabClass = (tabName) => {
+  const getTabClass = (path) => {
+    const isActive = location.pathname === path;
     return `flex items-center w-full gap-2 cursor-pointer p-5 transition-colors duration-300
     ${
-      activeTab === tabName
+      isActive
         ? "bg-custom-primary/20 text-custom-white border-r-4 border-custom-primary"
-        : "hover:bg-white/10"
+        : "hover:bg-white/10 text-custom-gray"
     }`;
   };
 
@@ -43,9 +49,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
       <div className="w-full flex flex-col gap-2 overflow-y-auto sidebar-scroll pb-4">
         {/* DASHBOARD */}
         <Link
-          to="/"
-          onClick={() => setActiveTab("Dashboard")}
-          className={getTabClass("Dashboard")}
+          to="/home"
+          onClick={() => activeTab("Dashboard")}
+          className={getTabClass("/home")}
         >
           <LayoutDashboard size={24} />
           <p className="text-base">Dashboard</p>
@@ -53,9 +59,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
         {/* INVENTORY */}
         <Link
-          to="/inventory"
+          to="/home/inventory"
           onClick={() => setActiveTab("Inventory")}
-          className={getTabClass("Inventory")}
+          className={getTabClass("/home/inventory")}
         >
           <Boxes size={24} />
           <p className="text-base">Inventory</p>
@@ -63,9 +69,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
         {/* REQUESTS */}
         <Link
-          to="/requests"
+          to="/home/requests"
           onClick={() => setActiveTab("Requests")}
-          className={getTabClass("Requests")}
+          className={getTabClass("/home/requests")}
         >
           <HandHelping size={24} />
           <p className="text-base">Requests</p>
@@ -73,9 +79,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
         {/* FORECAST */}
         <Link
-          to="/forecast"
+          to="/home/forecast"
           onClick={() => setActiveTab("Forecast")}
-          className={getTabClass("Forecast")}
+          className={getTabClass("/home/forecast")}
         >
           <ChartNoAxesCombined size={24} />
           <p className="text-base">Forecast</p>
@@ -85,9 +91,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           <>
             {/* TRANSACTIONS */}
             <Link
-              to="/transactions"
+              to="/home/transactions"
               onClick={() => setActiveTab("Transactions")}
-              className={getTabClass("Transactions")}
+              className={getTabClass("/home/transactions")}
             >
               <FileClock size={24} />
               <p className="text-base">Transactions</p>
@@ -95,9 +101,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
             {/* BARCODE */}
             <Link
-              to="/barcode"
+              to="/home/barcode"
               onClick={() => setActiveTab("Barcode")}
-              className={getTabClass("Barcode")}
+              className={getTabClass("/home/barcode")}
             >
               <Barcode size={24} />
               <p className="text-base">Barcode</p>
@@ -105,9 +111,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
             {/* DISCOUNT - Restored! */}
             <Link
-              to="/discount"
+              to="/home/discount"
               onClick={() => setActiveTab("Discount")}
-              className={getTabClass("Discount")}
+              className={getTabClass("/home/discount")}
             >
               <Tag size={24} />
               <p className="text-base">Discount</p>
@@ -115,18 +121,18 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
             {/* ACCOUNTS */}
             <Link
-              to="/accounts"
+              to="/home/accounts"
               onClick={() => setActiveTab("Accounts")}
-              className={getTabClass("Accounts")}
+              className={getTabClass("/home/accounts")}
             >
               <UserPen size={24} />
               <p className="text-base">Accounts</p>
             </Link>
 
             <Link
-              to="/audit"
+              to="/home/audit"
               onClick={() => setActiveTab("Audit Log")}
-              className={getTabClass("Audit Log")}
+              className={getTabClass("/home/audit")}
             >
               <Logs size={24} />
               <p className="text-base">Audit Log</p>
@@ -134,9 +140,9 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
 
             {/* ARCHIVES */}
             <Link
-              to="/archives"
+              to="/home/archives"
               onClick={() => setActiveTab("Archives")}
-              className={getTabClass("Archives")}
+              className={getTabClass("/home/archives")}
             >
               <Archive size={24} />
               <p className="text-base">Archives</p>
