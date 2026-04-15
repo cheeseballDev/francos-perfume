@@ -7,9 +7,10 @@ import {
   HandHelping,
   LayoutDashboard,
   Logs,
-  UserPen
+  UserPen,
+  Tag // Added for Discount
 } from "lucide-react";
-import { Link } from "react-router-dom"; // Move this to the top!
+import { Link } from "react-router-dom";
 import logo from "../../assets/FrancoPerfumeLogo.png";
 
 const Sidebar = ({ role, activeTab, setActiveTab }) => {
@@ -20,18 +21,26 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
   const getTabClass = (tabName) => {
     return `flex items-center w-full gap-2 cursor-pointer p-5 transition-colors duration-300
     ${
-      activeTab === tabName ? 'bg-custom-primary/20 text-custom-white border-r-20 border-custom-primary' : 'hover:bg-white/10'
+      activeTab === tabName
+        ? "bg-custom-primary/20 text-custom-white border-r-4 border-custom-primary"
+        : "hover:bg-white/10"
     }`;
   };
 
   return (
-    <div className="w-64 bg-custom-black text-custom-white flex flex-col z-20 shrink-0">
+    <div className="w-64 bg-custom-black text-custom-white flex flex-col z-20 shrink-0 h-full">
       <div className="py-6 px-6 border-b border-white/10 flex flex-col items-center justify-center ">
-        <img src={logo} alt={companyPictureAlt} className="h-24 w-auto object-contain mb-6" />
-        <span className="text-1xl tracking-widest text-custom-gray font-semibold uppercase">Main Menu</span>
+        <img
+          src={logo}
+          alt={companyPictureAlt}
+          className="h-24 w-auto object-contain mb-6"
+        />
+        <span className="text-sm tracking-widest text-custom-gray font-semibold uppercase">
+          Main Menu
+        </span>
       </div>
 
-      <div className="w-full flex flex-col gap-2 overflow-y-auto sidebar-scroll">
+      <div className="w-full flex flex-col gap-2 overflow-y-auto sidebar-scroll pb-4">
         {/* DASHBOARD */}
         <Link
           to="/"
@@ -39,7 +48,7 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           className={getTabClass("Dashboard")}
         >
           <LayoutDashboard size={24} />
-          <p className="text-1xl">Dashboard</p>
+          <p className="text-base">Dashboard</p>
         </Link>
 
         {/* INVENTORY */}
@@ -49,7 +58,7 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           className={getTabClass("Inventory")}
         >
           <Boxes size={24} />
-          <p className="text-1xl">Inventory</p>
+          <p className="text-base">Inventory</p>
         </Link>
 
         {/* REQUESTS */}
@@ -59,69 +68,80 @@ const Sidebar = ({ role, activeTab, setActiveTab }) => {
           className={getTabClass("Requests")}
         >
           <HandHelping size={24} />
-          <p className="text-1xl">Requests</p>
+          <p className="text-base">Requests</p>
         </Link>
 
         {/* FORECAST */}
-        <div
+        <Link
+          to="/forecast"
           onClick={() => setActiveTab("Forecast")}
           className={getTabClass("Forecast")}
         >
           <ChartNoAxesCombined size={24} />
-          <p className="text-1xl">Forecast</p>
-        </div>
+          <p className="text-base">Forecast</p>
+        </Link>
 
         {isManager && (
-          <Link
-            to="/transactions" // MUST match App.jsx path
-            onClick={() => setActiveTab("Transactions")}
-            className={getTabClass("Transactions")}
-          >
-            <FileClock size={24} />
-            <p className="text-1xl">Transactions</p>
-          </Link>
-        )}
+          <>
+            {/* TRANSACTIONS */}
+            <Link
+              to="/transactions"
+              onClick={() => setActiveTab("Transactions")}
+              className={getTabClass("Transactions")}
+            >
+              <FileClock size={24} />
+              <p className="text-base">Transactions</p>
+            </Link>
 
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Barcode")}
-            className={getTabClass("Barcode")}
-          >
-            <Barcode size={24} />
-            <p className="text-1xl">Barcode</p>
-          </div>
-        )}
+            {/* BARCODE */}
+            <Link
+              to="/barcode"
+              onClick={() => setActiveTab("Barcode")}
+              className={getTabClass("Barcode")}
+            >
+              <Barcode size={24} />
+              <p className="text-base">Barcode</p>
+            </Link>
 
-        {/* DISCOUNT - Now properly fixed and styled */}
-        {isManager && (
-          <Link
-            to="/accounts"
-            onClick={() => setActiveTab("Accounts")}
-            className={getTabClass("Accounts")}
-          >
-            <UserPen size={24} />
-            <p className="text-1xl">Accounts</p>
-          </Link>
-        )}
+            {/* DISCOUNT - Restored! */}
+            <Link
+              to="/discount"
+              onClick={() => setActiveTab("Discount")}
+              className={getTabClass("Discount")}
+            >
+              <Tag size={24} />
+              <p className="text-base">Discount</p>
+            </Link>
 
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Audit Log")}
-            className={getTabClass("Audit Log")}
-          >
-            <Logs size={24} />
-            <p className="text-1xl">Audit Log</p>
-          </div>
-        )}
+            {/* ACCOUNTS */}
+            <Link
+              to="/accounts"
+              onClick={() => setActiveTab("Accounts")}
+              className={getTabClass("Accounts")}
+            >
+              <UserPen size={24} />
+              <p className="text-base">Accounts</p>
+            </Link>
 
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Archives")}
-            className={getTabClass("Archives")}
-          >
-            <Archive size={24} />
-            <p className="text-1xl">Archives</p>
-          </div>
+            <Link
+              to="/audit"
+              onClick={() => setActiveTab("Audit Log")}
+              className={getTabClass("Audit Log")}
+            >
+              <Logs size={24} />
+              <p className="text-base">Audit Log</p>
+            </Link>
+
+            {/* ARCHIVES */}
+            <Link
+              to="/archives"
+              onClick={() => setActiveTab("Archives")}
+              className={getTabClass("Archives")}
+            >
+              <Archive size={24} />
+              <p className="text-base">Archives</p>
+            </Link>
+          </>
         )}
       </div>
     </div>

@@ -88,7 +88,7 @@ const RequestPage = () => {
       cell: ({row}) => {
         const item = row.original;
         return (
-          <Button variant="primary" size="sm" onClick={() => { setIsDetailsOpen(true); setSelectedRequest(item); }}><Eye size={14}/> View Details</Button>    
+          <Button variant="primary" size="sm" onClick={() => { handleOpenDetails(item.id); }}><Eye size={14}/> View Details</Button>    
         )
       }
     }
@@ -122,6 +122,10 @@ const RequestPage = () => {
     setRequests([newRequest, ...requests]);
   };
 
+  const handleOpenDetails = (id) => {
+    setSelectedRequest(id)
+    setIsDetailsOpen(true)
+  };
 
   return (
     <div className="flex flex-col h-full animate-fade-in relative">
