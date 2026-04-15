@@ -14,14 +14,15 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/FrancoPerfumeLogo.png";
 
-const Sidebar = ({ role }) => {
+const Sidebar = ({ user }) => {
   const location = useLocation();
+
+  const { trueRole } = user;
 
   const [activeTab, setActiveTab] = useState("Dashboard");
 
   const companyPictureAlt = "Franco's Logo";
-  const normalizedRole = role ? role.toLowerCase() : "";
-  const isManager = normalizedRole === "manager";
+  const isManager = trueRole === "manager";
 
   const getTabClass = (path) => {
     const isActive = location.pathname === path;
@@ -50,7 +51,7 @@ const Sidebar = ({ role }) => {
         {/* DASHBOARD */}
         <Link
           to="/home"
-          onClick={() => activeTab("Dashboard")}
+          onClick={() => setActiveTab("Dashboard")}
           className={getTabClass("/home")}
         >
           <LayoutDashboard size={24} />

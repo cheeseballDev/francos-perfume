@@ -6,17 +6,17 @@ const DashboardLayout = ({ user, onRoleSwitch, onLogout }) => {
   
   const { trueRole, activeRole, email: userEmail } = user;
 
+  const canSwitchAccess = trueRole === 'manager';
+
   const handleSwitchAccess = () => {
     const nextRole = activeRole === 'manager' ? 'cashier' : 'manager';
     onRoleSwitch(nextRole);
   };
 
-  const canSwitchAccess = trueRole?.toLowerCase === 'manager';
-
   return (
     <div className="flex h-screen bg-[#F7F7F9] text-[#333] font-montserrat text-[16px]">
       <Sidebar
-        role={trueRole}
+        user={user}
       />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
