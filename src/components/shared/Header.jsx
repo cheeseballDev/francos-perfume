@@ -4,8 +4,7 @@ import ProfileDropdown from './ProfileDropdown';
 
 const Header = ({ user, onLogout, onSwitchAccess }) => {
 
-  const canSwitchAccess = user.trueRole === 'manager';
-  const canChangeLocation = user.trueRole === 'manager';
+  const canSwitchAccessAndChangeLocation = user.trueRole === 'manager';
   const [currentDate, setCurrentDate] = useState("");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("Sta. Lucia");
@@ -25,7 +24,7 @@ const Header = ({ user, onLogout, onSwitchAccess }) => {
 
            <div className="flex items-center gap-2">
              <span className="font-semibold text-custom-black">Location:</span>
-             {canChangeLocation ? (
+             {canSwitchAccessAndChangeLocation ? (
                <select
                  value={selectedLocation}
                  onChange={(e) => setSelectedLocation(e.target.value)}
