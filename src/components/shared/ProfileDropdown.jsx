@@ -1,7 +1,7 @@
 import { ArrowRightLeft, LogOut, Settings, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-const ProfileDropdown = ({ user, showLogoutModal, onSwitchAccess, /*theme = 'dark' */ }) => {
+const ProfileDropdown = ({ user, setShowLogoutModal, onSwitchAccess, /*theme = 'dark' */ }) => {
   const canSwitchAccess = user.trueRole === 'manager';
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -61,7 +61,7 @@ const ProfileDropdown = ({ user, showLogoutModal, onSwitchAccess, /*theme = 'dar
           <div
             onClick={() => {
               setIsOpen(false);
-              showLogoutModal();
+              setShowLogoutModal(true);
             }}
             className="flex items-center gap-3 px-4 py-3 cursor-pointer bg-custom-red hover:bg-custom-red/80 transition-colors"
           >
