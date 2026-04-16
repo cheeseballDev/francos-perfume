@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("productstable")]
+    [Table("products")]
 
     public class Products
     {
@@ -23,5 +23,7 @@ namespace InventorySystemBackend.Models.Entities
         public required string product_barcode { get; set; }
         public required string product_status { get; set; }
         public string? product_description {  get; set; }
+        public decimal product_price { get; set; }
+        public required string product_image_url { get; set; }
     }
 }

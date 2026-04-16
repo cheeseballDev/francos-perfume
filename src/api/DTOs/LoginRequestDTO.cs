@@ -1,6 +1,6 @@
-﻿namespace InventorySystemBackend.Models.API
+﻿namespace InventorySystemBackend.DTOs
 {
-    public class LoginRequestModel
+    public class LoginRequestDTO
     {
         public string? email { get; set; }
         public string? password { get; set; }

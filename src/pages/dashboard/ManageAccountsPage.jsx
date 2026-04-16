@@ -61,7 +61,8 @@ const ManageAccountsPage = () => {
 
   // --- HANDLERS ---
   const handleSaveNewAccount = (newAcc) => {
-    setRequests([newAcc, ...accounts]);
+    // FIXED: Was previously 'setRequests' which broke the app
+    setAccounts([newAcc, ...accounts]);
   };
 
   const handleUpdateAccount = (updatedAcc) => {
@@ -103,7 +104,7 @@ const ManageAccountsPage = () => {
       <h2 className="text-2xl font-bold text-[#333] mb-6">Accounts List</h2>
 
       {/* DATA TABLE */}
-      <div className="overflow-hidden min-h-112.5">
+      <div className="overflow-hidden min-h-[450px]">
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-[12px] text-gray-400 uppercase bg-transparent border-b border-gray-100">
             <tr>
@@ -130,7 +131,7 @@ const ManageAccountsPage = () => {
                   <td className="px-4 py-4">{user.role}</td>
                   <td className="px-4 py-4">{user.branch}</td>
                   <td className="px-4 py-4">{user.date}</td>
-                  <td className="px-4 py-4 text-gray-700 font-medium">{user.status}</td>
+                  <td className={`px-4 py-4 font-medium ${user.status === 'Active' ? 'text-green-600' : 'text-red-400'}`}>{user.status}</td>
                   <td className="px-4 py-4 text-center">
                     <Button variant="primary" size="sm" onClick={() => { setSelectedAccount(user); setIsInfoModalOpen(true); }}>
                       ••• View
@@ -187,9 +188,10 @@ const ManageAccountsPage = () => {
         isOpen={isInfoModalOpen}
         onClose={() => setIsInfoModalOpen(false)}
         account={selectedAccount}
-        onEdit={() => {
+        // FIXED: Renamed from 'onEdit' to 'onEditClick' to match AccountInfoModal props
+        onEditClick={() => {
           setIsInfoModalOpen(false); // Close Info
-          setIsEditModalOpen(true);  // Open Edit
+          setTimeout(() => setIsEditModalOpen(true), 150);  // Open Edit (slight delay for smoother transition)
         }}
       />
 

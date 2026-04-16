@@ -11,11 +11,11 @@ namespace InventorySystemBackend.Services
             User = user;
         }
 
-        public string role => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
-        public string employeeId => User.FindFirst("employee_id")?.Value ?? "";
+        public string role => User.FindFirst(ClaimTypes.Role)?.Value ?? "Guest";
+        public string employeeId => User.FindFirst("employee_id")?.Value ?? "0";
 
-        public string employeeDisplayId => User.FindFirst("employee_display_id")?.Value ?? "";
-        public string branchId => User.FindFirst("branch_id")?.Value ?? "";
+        public string employeeDisplayId => User.FindFirst("employee_display_id")?.Value ?? "EM-000";
+        public string branchId => User.FindFirst("branch_id")?.Value ?? "0";
 
         public string GetBranchDisplayId(ClaimsPrincipal user)
         {

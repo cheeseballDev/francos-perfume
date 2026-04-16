@@ -1,9 +1,9 @@
-﻿using InventorySystemBackend.Models.API;
-using InventorySystemBackend.Services;
+﻿using InventorySystemBackend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InventorySystemBackend.Data;
+using InventorySystemBackend.DTOs;
 
 namespace InventorySystemBackend.Controllers
 {
@@ -20,7 +20,7 @@ namespace InventorySystemBackend.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequestModel dto)
+        public async Task<IActionResult> Login(LoginRequestDTO dto)
         {
             var result = await jwtService.Authenticate(dto);
 

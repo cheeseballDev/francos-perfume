@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("archiveaccountstable")]
+    [Table("archive_accounts")]
     public class ArchivedAccounts
     {
         [Key]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventorySystemBackend.Models.Entities
 {
-    [Table("employeeprofiletable")]
+    [Table("employee_profile")]
     public class EmployeeProfiles
     {
         [Key]
@@ -25,7 +25,8 @@ namespace InventorySystemBackend.Models.Entities
 
         public DateTime account_created { get; set; } = DateTime.UtcNow;
         public required string employee_profile_picture {  get; set; }
-
+        [ForeignKey("branch_id")]
+        public virtual Branches Branch{ get; set; }
         public ICollection<EmployeeAuths> AuthMethods { get; set; } = new List<EmployeeAuths>();
     }
 }

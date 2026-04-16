@@ -1,5 +1,5 @@
 ﻿using InventorySystemBackend.Data;
-using InventorySystemBackend.Models.API;
+using InventorySystemBackend.DTOs;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace InventorySystemBackend.Services
             this.iconfig = iconfig;
         }
 
-        public async Task<LoginResponseModel?> Authenticate(LoginRequestModel request)
+        public async Task<LoginResponseModel?> Authenticate(LoginRequestDTO request)
         {
             if (string.IsNullOrWhiteSpace(request.email) || string.IsNullOrWhiteSpace(request.password))
                 return null;

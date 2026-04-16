@@ -10,131 +10,145 @@ import {
   Tag,
   UserPen
 } from "lucide-react";
-import { Link } from "react-router-dom"; // Move this to the top!
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/FrancoPerfumeLogo.png";
 
-const Sidebar = ({ role, activeTab, setActiveTab }) => {
-  const companyPictureAlt = "Franco's Logo";
-  const normalizedRole = role ? role.toLowerCase() : "";
-  const isManager = normalizedRole === "manager";
+const Sidebar = ({ user }) => {
+  const location = useLocation();
 
-  const getTabClass = (tabName) => {
+  const { trueRole } = user;
+
+  const [activeTab, setActiveTab] = useState("Dashboard");
+
+  const companyPictureAlt = "Franco's Logo";
+  const isManager = trueRole === "manager";
+
+  const getTabClass = (path) => {
+    const isActive = location.pathname === path;
     return `flex items-center w-full gap-2 cursor-pointer p-5 transition-colors duration-300
     ${
-      activeTab === tabName ? 'bg-custom-primary/20 text-custom-white border-r-20 border-custom-primary' : 'hover:bg-white/10'
+      isActive
+        ? "bg-custom-primary/20 text-custom-white border-r-4 border-custom-primary"
+        : "hover:bg-white/10 text-custom-gray"
     }`;
   };
 
   return (
-    <div className="w-64 bg-custom-black text-custom-white flex flex-col z-20 shrink-0">
+    <div className="w-64 bg-custom-black text-custom-white flex flex-col z-20 shrink-0 h-full">
       <div className="py-6 px-6 border-b border-white/10 flex flex-col items-center justify-center ">
-        <img src={logo} alt={companyPictureAlt} className="h-24 w-auto object-contain mb-6" />
-        <span className="text-1xl tracking-widest text-custom-gray font-semibold uppercase">Main Menu</span>
+        <img
+          src={logo}
+          alt={companyPictureAlt}
+          className="h-24 w-auto object-contain mb-6"
+        />
+        <span className="text-sm tracking-widest text-custom-gray font-semibold uppercase">
+          Main Menu
+        </span>
       </div>
 
-      <div className="w-full flex flex-col gap-2 overflow-y-auto sidebar-scroll">
+      <div className="w-full flex flex-col gap-2 overflow-y-auto sidebar-scroll pb-4">
         {/* DASHBOARD */}
         <Link
-          to="/"
+          to="/home"
           onClick={() => setActiveTab("Dashboard")}
-          className={getTabClass("Dashboard")}
+          className={getTabClass("/home")}
         >
           <LayoutDashboard size={24} />
-          <p className="text-1xl">Dashboard</p>
+          <p className="text-base">Dashboard</p>
         </Link>
 
         {/* INVENTORY */}
         <Link
-          to="/inventory"
+          to="/home/inventory"
           onClick={() => setActiveTab("Inventory")}
-          className={getTabClass("Inventory")}
+          className={getTabClass("/home/inventory")}
         >
           <Boxes size={24} />
-          <p className="text-1xl">Inventory</p>
+          <p className="text-base">Inventory</p>
         </Link>
 
         {/* REQUESTS */}
         <Link
-          to="/requests"
+          to="/home/requests"
           onClick={() => setActiveTab("Requests")}
-          className={getTabClass("Requests")}
+          className={getTabClass("/home/requests")}
         >
           <HandHelping size={24} />
-          <p className="text-1xl">Requests</p>
+          <p className="text-base">Requests</p>
         </Link>
 
         {/* FORECAST */}
-        <div
+        <Link
+          to="/home/forecast"
           onClick={() => setActiveTab("Forecast")}
-          className={getTabClass("Forecast")}
+          className={getTabClass("/home/forecast")}
         >
           <ChartNoAxesCombined size={24} />
-          <p className="text-1xl">Forecast</p>
-        </div>
+          <p className="text-base">Forecast</p>
+        </Link>
 
         {isManager && (
-          <Link
-            to="/transactions" // MUST match App.jsx path
-            onClick={() => setActiveTab("Transactions")}
-            className={getTabClass("Transactions")}
-          >
-            <FileClock size={24} />
-            <p className="text-1xl">Transactions</p>
-          </Link>
-        )}
+          <>
+            {/* TRANSACTIONS */}
+            <Link
+              to="/home/transactions"
+              onClick={() => setActiveTab("Transactions")}
+              className={getTabClass("/home/transactions")}
+            >
+              <FileClock size={24} />
+              <p className="text-base">Transactions</p>
+            </Link>
 
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Barcode")}
-            className={getTabClass("Barcode")}
-          >
-            <Barcode size={24} />
-            <p className="text-1xl">Barcode</p>
-          </div>
-        )}
+            {/* BARCODE */}
+            <Link
+              to="/home/barcode"
+              onClick={() => setActiveTab("Barcode")}
+              className={getTabClass("/home/barcode")}
+            >
+              <Barcode size={24} />
+              <p className="text-base">Barcode</p>
+            </Link>
 
-        {/* DISCOUNT - Now properly fixed and styled */}
-        {isManager && (
-          <Link
-            to="/discount"
-            onClick={() => setActiveTab("Discounts")}
-            className={getTabClass("Discounts")}>
-              <Tag size={24}/>
-              <p className="text-1xl">Discounts</p>
-          </Link>
-        )
-        }
+            {/* DISCOUNT - Restored! */}
+            <Link
+              to="/home/discount"
+              onClick={() => setActiveTab("Discount")}
+              className={getTabClass("/home/discount")}
+            >
+              <Tag size={24} />
+              <p className="text-base">Discount</p>
+            </Link>
 
+            {/* ACCOUNTS */}
+            <Link
+              to="/home/accounts"
+              onClick={() => setActiveTab("Accounts")}
+              className={getTabClass("/home/accounts")}
+            >
+              <UserPen size={24} />
+              <p className="text-base">Accounts</p>
+            </Link>
 
-        {isManager && (
-          <Link
-            to="/accounts"
-            onClick={() => setActiveTab("Accounts")}
-            className={getTabClass("Accounts")}
-          >
-            <UserPen size={24} />
-            <p className="text-1xl">Accounts</p>
-          </Link>
-        )}
+            <Link
+              to="/home/audit"
+              onClick={() => setActiveTab("Audit Log")}
+              className={getTabClass("/home/audit")}
+            >
+              <Logs size={24} />
+              <p className="text-base">Audit Log</p>
+            </Link>
 
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Audit Log")}
-            className={getTabClass("Audit Log")}
-          >
-            <Logs size={24} />
-            <p className="text-1xl">Audit Log</p>
-          </div>
-        )}
-
-        {isManager && (
-          <div
-            onClick={() => setActiveTab("Archives")}
-            className={getTabClass("Archives")}
-          >
-            <Archive size={24} />
-            <p className="text-1xl">Archives</p>
-          </div>
+            {/* ARCHIVES */}
+            <Link
+              to="/home/archives"
+              onClick={() => setActiveTab("Archives")}
+              className={getTabClass("/home/archives")}
+            >
+              <Archive size={24} />
+              <p className="text-base">Archives</p>
+            </Link>
+          </>
         )}
       </div>
     </div>

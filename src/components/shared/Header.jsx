@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 import ProfileDropdown from './ProfileDropdown';
 
-const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
+const Header = ({ user, onLogout, onSwitchAccess }) => {
+
+  const canSwitchAccess = user.trueRole === 'manager';
+  const canChangeLocation = user.trueRole === 'manager';
   const [currentDate, setCurrentDate] = useState("");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("Sta. Lucia");
@@ -13,9 +16,6 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
     const phtDate = new Intl.DateTimeFormat('en-CA', options).format(new Date());
     setCurrentDate(phtDate.replace(/-/g, '/'));
   }, []);
-
-  const normalizedRole = role ? role.toLowerCase() : '';
-  const canChangeLocation = normalizedRole === 'manager';
 
   return (
     <>
@@ -42,12 +42,11 @@ const Header = ({ role, userEmail, onLogout, canSwitchAccess, onSwitchAccess }) 
         </div>
         
         {/* OUR CLEAN NEW COMPONENT */}
-        <ProfileDropdown 
-          userEmail={userEmail} 
-          onLogout={() => setShowLogoutModal(true)} 
-          canSwitchAccess={canSwitchAccess} 
-          onSwitchAccess={onSwitchAccess} 
-          theme="light" 
+        <ProfileDropdown
+          user={user}
+          showLogoutModal={() => setShowLogoutModal(true)}
+          onSwitchAccess={onSwitchAccess}
+          //theme='light'  // Uncomment this line if you want to use the light theme variant
         />
         
       </header>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SearchBar from "../../components/shared/SearchBar";
+import ArchiveDiscountModal from "../../components/features/discount_components/ArchiveDiscountModal"; // Adjust path if needed!
 
 const initialDiscounts = [
   { prefix: "SEN", name: "Senior Citizen", percent: 20, status: "Active" },
@@ -14,6 +15,10 @@ const DiscountPage = () => {
   const [discounts, setDiscounts] = useState(initialDiscounts);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+
+  // Modal State
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [discountToArchive, setDiscountToArchive] = useState(null);
 
   const [newDiscount, setNewDiscount] = useState({
     name: "",
@@ -36,8 +41,19 @@ const DiscountPage = () => {
     */
   };
 
-  const handleDelete = (prefix) => {
-    setDiscounts(discounts.filter((d) => d.prefix !== prefix));
+  // Opens the modal and remembers which discount we clicked
+  const initiateDelete = (prefix) => {
+    setDiscountToArchive(prefix);
+    setIsArchiveModalOpen(true);
+  };
+
+  // Actually removes it from state (Called by the Modal's YES button)
+  const confirmDelete = () => {
+    if (discountToArchive) {
+      setDiscounts(discounts.filter((d) => d.prefix !== discountToArchive));
+    }
+    setIsArchiveModalOpen(false);
+    setDiscountToArchive(null);
   };
 
   const toggleStatus = (prefix) => {
@@ -52,7 +68,8 @@ const DiscountPage = () => {
 
   // --- FILTER LOGIC ---
   const filteredDiscounts = discounts.filter((d) => {
-    const matchesSearch = d.name.toLowerCase().includes(searchQuery.toLowerCase()) || d.prefix.toLowerCase().includes(searchLower);
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = d.name.toLowerCase().includes(searchLower) || d.prefix.toLowerCase().includes(searchLower);
     const matchesStatus = statusFilter === "All" || d.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -106,7 +123,15 @@ const DiscountPage = () => {
                   <td className="py-4">
                     <div className="flex justify-center gap-2">
                       <button className="p-1.5 hover:bg-gray-200 rounded transition-colors text-gray-600">📝</button>
-                      <button onClick={() => handleDelete(d.prefix)} className="p-1.5 bg-[#902A3C] hover:bg-red-700 text-white rounded transition-colors text-xs">🗑</button>
+                      
+                      {/* CONNECTED THE TRASH ICON TO THE MODAL */}
+                      <button 
+                        onClick={() => initiateDelete(d.prefix)} 
+                        className="p-1.5 bg-[#902A3C] hover:bg-red-700 text-white rounded transition-colors text-xs"
+                      >
+                        🗑
+                      </button>
+                      
                       <button 
                         onClick={() => toggleStatus(d.prefix)}
                         className={`p-1.5 rounded transition-colors text-xs ${d.status === 'Active' ? 'bg-[#E5D5C1] text-gray-800' : 'bg-gray-800 text-white'}`}
@@ -198,6 +223,17 @@ const DiscountPage = () => {
         </div>
 
       </div>
+
+      {/* MODAL INJECTION */}
+      <ArchiveDiscountModal 
+        isOpen={isArchiveModalOpen}
+        onClose={() => {
+          setIsArchiveModalOpen(false);
+          setDiscountToArchive(null);
+        }}
+        onConfirm={confirmDelete}
+      />
+
     </div>
   );
 };

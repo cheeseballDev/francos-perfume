@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import SearchBar from "../../components/shared/SearchBar";
+import ExportTransactionModal from "../../components/features/transactions_components/ExportTransactionModal";
 
 // --- DUMMY DATA (Simulating POS Sales & Inventory Restocks) ---
 const initialTransactions = [
@@ -15,6 +16,9 @@ const TransactionsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({ details: 'All', processedBy: 'All', dateFrom: '', dateTo: '' });
   
+  // Modal State
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -141,14 +145,25 @@ const TransactionsPage = () => {
         </div>
       </div>
 
+      {/* ACTIONS */}
       <div className="flex gap-3 mt-4">
-        <button className="flex items-center gap-2 bg-[#E5D5C1] hover:bg-[#d4c2ab] text-gray-800 px-4 py-2 rounded font-medium text-sm transition-colors shadow-sm">
+        {/* Connected the onClick handler to open the modal */}
+        <button 
+          onClick={() => setIsExportModalOpen(true)}
+          className="flex items-center gap-2 bg-[#E5D5C1] hover:bg-[#d4c2ab] text-gray-800 px-4 py-2 rounded font-medium text-sm transition-colors shadow-sm"
+        >
           📊 Export
         </button>
         <button className="flex items-center gap-2 bg-[#E5D5C1] hover:bg-[#d4c2ab] text-gray-800 px-4 py-2 rounded font-medium text-sm transition-colors shadow-sm">
           📥 Import
         </button>
       </div>
+
+      {/* MODAL INJECTION */}
+      <ExportTransactionModal 
+        isOpen={isExportModalOpen} 
+        onClose={() => setIsExportModalOpen(false)} 
+      />
     </div>
   );
 };

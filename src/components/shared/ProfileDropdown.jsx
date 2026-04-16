@@ -1,18 +1,20 @@
 import { ArrowRightLeft, LogOut, Settings, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-const ProfileDropdown = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess, theme = 'dark' }) => {
+const ProfileDropdown = ({ user, showLogoutModal, onSwitchAccess, /*theme = 'dark' */ }) => {
+  const canSwitchAccess = user.trueRole === 'manager';
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const displayUsername = userEmail ? userEmail.split('@')[0] : 'Employee Name';
+  const displayUsername = user.email ? user.email.split('@')[0] : 'Employee Name';
 
-  // Adapts the text color based on where you put the component
+  /* Adapts the text color based on where you put the component
   const triggerTextColor = theme === 'dark'
     ? 'text-custom-gray hover:text-custom-white'
     : 'text-custom-black hover:text-custom-black/70';
+    */
 
-  // Bonus: This automatically closes the dropdown if the user clicks anywhere else on the screen!
+    
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -29,7 +31,7 @@ const ProfileDropdown = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess,
       {/* The Clickable Trigger */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 cursor-pointer transition-colors ${triggerTextColor}`}
+        className={`flex items-center gap-2 cursor-pointer transition-colors text-custom-gray hover:text-custom-white`}
       >
         <User size={20} />
         <span className="font-medium text-[15px]">{displayUsername}</span>
@@ -59,7 +61,7 @@ const ProfileDropdown = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess,
           <div
             onClick={() => {
               setIsOpen(false);
-              onLogout();
+              showLogoutModal();
             }}
             className="flex items-center gap-3 px-4 py-3 cursor-pointer bg-custom-red hover:bg-custom-red/80 transition-colors"
           >

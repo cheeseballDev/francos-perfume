@@ -1,13 +1,16 @@
-import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import logo from '../../assets/FrancoPerfumeLogo.png';
+import CashPaymentModal from '../../components/features/pos_components/CashPaymentModal';
+import CheckoutModal from '../../components/features/pos_components/CheckoutModal';
 import DiscountModal from '../../components/features/pos_components/DiscountModal';
+import GCashPaymentModal from '../../components/features/pos_components/GCashPaymentModal';
 import ProductCard from '../../components/features/pos_components/ProductCard';
 import ProductModal from '../../components/features/pos_components/ProductModal';
 import ProfileDropdown from '../../components/shared/ProfileDropdown';
 
-const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
+const POS = ({ userEmail, userRole, onLogout, canSwitchAccess, onSwitchAccess }) => {
   const [cart, setCart] = useState([]);
   const [activeType, setActiveType] = useState('ALL'); 
   const [activeGender, setActiveGender] = useState('ALL'); 
@@ -18,12 +21,15 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [appliedDiscountRate, setAppliedDiscountRate] = useState(0); 
   
-  // Cancel Confirm State
+  // Confirmation Modal States
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false); // NEW STATE FOR CHECKOUT
   
   // Product Modal States
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [showCashModal, setShowCashModal] = useState(false);
+  const [showGCashModal, setShowGCashModal] = useState(false); // ADD THIS
 
   useEffect(() => {
     const updateTime = () => {
@@ -60,6 +66,82 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
 
   const handleRemoveDiscount = () => {
     setAppliedDiscountRate(0); 
+  };
+
+  const handlePaymentSelect = (method) => {
+    setShowCheckoutModal(false); 
+
+    if (method === 'Cash') {
+      setShowCashModal(true);      
+    } else if (method === 'GCash') {
+      setShowGCashModal(true);     
+    }
+  };
+
+  const handleConfirmCashPayment = (paymentDetails) => {
+    // ==========================================
+    // 🔌 API TEMPLATE: PROCESS POS TRANSACTION
+    // ==========================================
+    /*
+      try {
+        await fetch('YOUR_API_URL/transactions/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: cart,
+            total: grandTotal,
+            discountRate: appliedDiscountRate,
+            paymentMethod: paymentDetails.method,
+            amountReceived: paymentDetails.received,
+            change: paymentDetails.change
+          })
+        });
+      } catch (error) {
+        console.error("Payment processing failed", error);
+      }
+    */
+    
+    console.log('Cash Payment Confirmed:', paymentDetails);
+
+    // Reset the POS system for the next customer
+    setCart([]);
+    setAppliedDiscountRate(0);
+    setShowCashModal(false);
+    
+    // Optional: You could trigger a receipt print modal here
+    alert(`Payment successful! Change: ₱${paymentDetails.change.toFixed(2)}`);
+  };
+
+  const handleConfirmGCashPayment = (paymentDetails) => {
+    // ==========================================
+    // 🔌 API TEMPLATE: PROCESS GCASH TRANSACTION
+    // ==========================================
+    /*
+      try {
+        await fetch('YOUR_API_URL/transactions/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: cart,
+            total: grandTotal,
+            discountRate: appliedDiscountRate,
+            paymentMethod: paymentDetails.method,
+            referenceId: paymentDetails.referenceId
+          })
+        });
+      } catch (error) {
+        console.error("Payment processing failed", error);
+      }
+    */
+    
+    console.log('GCash Payment Confirmed:', paymentDetails);
+
+    // Reset the POS system for the next customer
+    setCart([]);
+    setAppliedDiscountRate(0);
+    setShowGCashModal(false);
+    
+    alert(`GCash Payment successful! Ref ID: ${paymentDetails.referenceId}`);
   };
 
   const filteredProducts = products.filter(p => {
@@ -110,6 +192,7 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
         {/* PROFILEDROPDOWN COMPONENT */}
         <ProfileDropdown 
           userEmail={userEmail} 
+          userRole={'cashier staff'}
           onLogout={onLogout} 
           canSwitchAccess={canSwitchAccess} 
           onSwitchAccess={onSwitchAccess} 
@@ -214,7 +297,15 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
             <Button variant="destructive" size="lg" className="flex-1 text-lg font-bold tracking-wide" onClick={() => setShowCancelConfirm(true)}>
               CANCEL
             </Button>
-            <Button variant="success" size="lg" className="flex-1 text-lg font-bold tracking-wide">
+            
+            {/* CHECKOUT BUTTON - OPENS NEW MODAL */}
+            <Button 
+              variant="success" 
+              size="lg" 
+              className="flex-1 text-lg font-bold tracking-wide"
+              onClick={() => setShowCheckoutModal(true)}
+              disabled={cart.length === 0} // Prevents opening if nothing is in the cart
+            >
               CHECKOUT
             </Button>
           </div>
@@ -258,6 +349,27 @@ const POS = ({ userEmail, onLogout, canSwitchAccess, onSwitchAccess }) => {
           </div>
         </div>
       )}
+
+      {/* MODAL INJECTION: CHECKOUT */}
+     <CheckoutModal 
+        isOpen={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        grandTotal={grandTotal}
+        onPaymentSelect={handlePaymentSelect}
+      />
+
+      <CashPaymentModal 
+        isOpen={showCashModal}
+        onClose={() => setShowCashModal(false)}
+        grandTotal={grandTotal}
+        onConfirmPayment={handleConfirmCashPayment}
+      />
+
+      <GCashPaymentModal
+        isOpen={showGCashModal}
+        onClose={() => setShowGCashModal(false)}
+        onConfirmPayment={handleConfirmGCashPayment}
+      />
       
     </div>
   );

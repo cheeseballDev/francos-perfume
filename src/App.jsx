@@ -1,77 +1,76 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import MobileBlocker from './components/features/pos_components/MobileBlocker';
 import DashboardLayout from './layouts/DashboardLayout';
 import LoginPage from './pages/auth/LoginPage';
+import ArchivesPage from './pages/dashboard/ArchivesPage';
+import AuditLogPage from './pages/dashboard/AuditLogPage';
+import BarcodePage from './pages/dashboard/BarcodePage';
+import DiscountPage from './pages/dashboard/DiscountPage';
+import ForecastPage from './pages/dashboard/ForecastPage';
+import HomePage from './pages/dashboard/HomePage';
+import InventoryPage from './pages/dashboard/InventoryPage';
+import AccountsPage from './pages/dashboard/ManageAccountsPage';
+import RequestPage from './pages/dashboard/RequestPage';
+import TransactionsPage from './pages/dashboard/TransactionsPage';
+import PointOfSalePage from './pages/pos/PointOfSalePage';
+import { UseAuth } from './services/UseAuth';
 
-// Pages - Ensure these paths match your actual file structure
-import Discount from './pages/dashboard/DiscountPage';
-import Forecast from './pages/dashboard/ForecastPage';
-import DashboardHome from './pages/dashboard/HomePage';
-import Inventory from './pages/dashboard/InventoryPage';
-import ManageAccounts from './pages/dashboard/ManageAccountsPage';
-import Request from './pages/dashboard/RequestPage';
-import TransactionsPage from './pages/dashboard/TransactionsPage'; // FIXED: Changed 'Transaction' to 'TransactionsPage'
+const ProtectedRoute = ({ user, allowedRoles }) => {
+  if (!user) return <Navigate to="/login" />
+  if (allowedRoles && !allowedRoles.includes(user.trueRole)) { return <Navigate to="/home" replace />; };
+  return <Outlet />;
+}
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
+  const { user, login, logout, switchRole } = UseAuth();
 
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => setIsMobileView(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleLogin = (userData) => {
-    setUser(userData);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-  };
-
-  if (isMobileView) {
-    return <MobileBlocker />;
-  }
+  if (isMobileView) { return <MobileBlocker />; }
+  
 
   return (
     <Router>
       <Routes>
-        {/* If not logged in, show Login. If logged in, redirect to Dashboard */}
-        <Route 
-          path="/login" 
-          element={!user ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/" />} 
+        <Route path='/login' 
+          element={
+            !user ? <LoginPage onLogin={login} /> : <Navigate to={user.activeRole === 'cashier' ? '/pos' : '/home'} replace />
+          }
         />
 
-        {/* Dashboard Wrapper */}
-        <Route 
-          path="/" 
+        <Route path='/home'
           element={
-            user ? (
-              <DashboardLayout 
-                trueRole={user.trueRole} 
-                activeRole={user.activeRole} 
-                userEmail={user.email} 
-                onLogout={handleLogout} 
-              />
-            ) : (
-              <Navigate to="/login" />
-            )
+            user ? <DashboardLayout user={user} onRoleSwitch={switchRole} onLogout={logout} /> : <Navigate to='/login' replace /> 
           }
         >
-          {/* Sub-pages that show up inside the DashboardLayout Outlet */}
-          <Route index element={<DashboardHome role={user?.activeRole} />} />
-          <Route path="inventory" element={<Inventory role={user?.activeRole} />} />
-          <Route path="requests" element={<Request />} />
-          <Route path="forecast" element={<Forecast />} />
-          <Route path="transactions" element={<TransactionsPage />} /> {/* Correctly matches the import now */}
-          <Route path="discount" element={<Discount />} />
-          <Route path="accounts" element={<ManageAccounts />} />
+
+        <Route index element={<HomePage role={user?.trueRole} />} />
+        <Route path="inventory" element={<InventoryPage role={user?.trueRole} />} />
+        <Route path="requests" element={<RequestPage />} />
+        <Route path="forecast" element={<ForecastPage />} />
+
+        {/* Manager ONLY */}
+          <Route element={<ProtectedRoute user={user} allowedRoles={['manager']} />}>
+              <Route path="barcode" element={<BarcodePage />} />
+              <Route path="transactions" element={<TransactionsPage />} />
+              <Route path="discount" element={<DiscountPage />} />
+              <Route path="accounts" element={<AccountsPage />} />
+              <Route path="archives" element={<ArchivesPage />} />
+              <Route path="audit" element={<AuditLogPage />} />
+          </Route>
+        </Route>
+        
+        <Route element={<ProtectedRoute user={user} allowedRoles={['manager', 'cashier']} />}>
+          <Route path="/pos" element={<PointOfSalePage user={user} onLogout={logout} />} />
         </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
