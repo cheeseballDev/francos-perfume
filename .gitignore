@@ -25,3 +25,5 @@ dist-ssr
 
 public/ui-prototype-pictures
 src/api/appsettings.json
+src/api/obj/Debug/net10.0/InventorySystemBackend.AssemblyInfoInputs.cache
+src/api/obj/Debug/net10.0/InventorySystemBackend.AssemblyInfo.cs
