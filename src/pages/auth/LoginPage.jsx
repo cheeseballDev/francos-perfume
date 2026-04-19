@@ -22,15 +22,18 @@ const LoginPage = ({ onLogin }) => {
 
     try {
       const result = await login(email, password);
+      setEmail(result.email);
+      setPassword(result.accessToken);
       setTrueRole(result.role);
       setBranch(result.branch);
 
       if (result.role === 'manager') {
         setView('module');
+        sessionStorage.setItem('accessToken', result.accessToken);
       } else {
         onLogin({
           email,
-          token: result.token,
+          accessToken: result.accessToken,
           trueRole: result.role,
           activeRole: result.role,
           branch: result.branch
@@ -46,11 +49,11 @@ const LoginPage = ({ onLogin }) => {
   const handleModuleSelect = (module) => {
     onLogin({
       email,
-      token: sessionStorage.getItem('token'),
+      accessToken: sessionStorage.getItem('accessToken'),
       trueRole,
       activeRole: module,
       branch
-    })
+    });
   };
 
   

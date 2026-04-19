@@ -10,7 +10,12 @@ import ProductCard from '../../components/features/pos_components/ProductCard';
 import ProductModal from '../../components/features/pos_components/ProductModal';
 import ProfileDropdown from '../../components/shared/ProfileDropdown';
 
-const POS = ({ userEmail, userRole, onLogout, canSwitchAccess, onSwitchAccess }) => {
+const PointOfSalePage = ({ user, onLogout, onSwitchAccess }) => {
+
+  const canSwitchAccess = user.trueRole === 'manager';
+
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const [cart, setCart] = useState([]);
   const [activeType, setActiveType] = useState('ALL'); 
   const [activeGender, setActiveGender] = useState('ALL'); 
@@ -191,12 +196,10 @@ const POS = ({ userEmail, userRole, onLogout, canSwitchAccess, onSwitchAccess })
 
         {/* PROFILEDROPDOWN COMPONENT */}
         <ProfileDropdown 
-          userEmail={userEmail} 
-          userRole={'cashier staff'}
-          onLogout={onLogout} 
-          canSwitchAccess={canSwitchAccess} 
+          user={user}
           onSwitchAccess={onSwitchAccess} 
-          theme="dark" 
+          onLogout={onLogout}
+          //theme="dark" 
         />
       </header>
 
@@ -375,4 +378,4 @@ const POS = ({ userEmail, userRole, onLogout, canSwitchAccess, onSwitchAccess })
   );
 };
 
-export default POS;
+export default PointOfSalePage;

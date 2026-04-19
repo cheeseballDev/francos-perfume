@@ -67,7 +67,7 @@ const App = () => {
         </Route>
         
         <Route element={<ProtectedRoute user={user} allowedRoles={['manager', 'cashier']} />}>
-          <Route path="/pos" element={<PointOfSalePage user={user} onLogout={logout} />} />
+          <Route path="/pos" element={<PointOfSalePage user={user} onLogout={logout} onSwitchAccess={switchRole} />} />
         </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

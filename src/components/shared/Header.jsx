@@ -1,16 +1,12 @@
-import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import ProfileDropdown from './ProfileDropdown';
 
 const Header = ({ user, onLogout, onSwitchAccess }) => {
 
-  const canSwitchAccess = user.trueRole === 'manager';
-  const canChangeLocation = user.trueRole === 'manager';
+  const canSwitchAccessAndChangeLocation = user.trueRole === 'manager';
   const [currentDate, setCurrentDate] = useState("");
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("Sta. Lucia");
   
-
   useEffect(() => {
     const options = { timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit' };
     const phtDate = new Intl.DateTimeFormat('en-CA', options).format(new Date());
@@ -25,7 +21,7 @@ const Header = ({ user, onLogout, onSwitchAccess }) => {
 
            <div className="flex items-center gap-2">
              <span className="font-semibold text-custom-black">Location:</span>
-             {canChangeLocation ? (
+             {canSwitchAccessAndChangeLocation ? (
                <select
                  value={selectedLocation}
                  onChange={(e) => setSelectedLocation(e.target.value)}
@@ -44,26 +40,12 @@ const Header = ({ user, onLogout, onSwitchAccess }) => {
         {/* OUR CLEAN NEW COMPONENT */}
         <ProfileDropdown
           user={user}
-          showLogoutModal={() => setShowLogoutModal(true)}
+          onLogout={onLogout}
           onSwitchAccess={onSwitchAccess}
           //theme='light'  // Uncomment this line if you want to use the light theme variant
         />
         
       </header>
-
-      {/* CONFIRMATION LOGOUT MODAL */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all">
-          <div className="bg-white p-8 rounded-md shadow-2xl max-w-sm w-full mx-4 border border-custom-gray-2 animate-fade-in">
-            <h3 className="text-2xl font-bold text-custom-black mb-2 tracking-tight">Sign Out</h3>
-            <p className="text-custom-gray mb-8 text-sm">Are you sure you want to end your current session?</p>
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setShowLogoutModal(false)}>Cancel</Button>
-              <Button variant="destructive" onClick={onLogout}>Yes, Sign Out</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

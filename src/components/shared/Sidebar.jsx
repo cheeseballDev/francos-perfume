@@ -16,13 +16,10 @@ import logo from "../../assets/FrancoPerfumeLogo.png";
 
 const Sidebar = ({ user }) => {
   const location = useLocation();
-
-  const { trueRole } = user;
-
   const [activeTab, setActiveTab] = useState("Dashboard");
 
   const companyPictureAlt = "Franco's Logo";
-  const isManager = trueRole === "manager";
+  const isManager = user.trueRole === "manager";
 
   const getTabClass = (path) => {
     const isActive = location.pathname === path;
